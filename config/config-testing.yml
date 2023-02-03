@@ -1,0 +1,13 @@
+lottery_contract_address: "{some contract address}"
+lottery_validation_contract_address: "{some contract address}"
+networks:
+  - "polygon"
+  - "arbitrum"
+  - "optimism"
+min_amount: "0.1"
+peer: "{some peer id}"
+plateaus_private_key: "{some private key}"
+plateaus_rpc: "https://plateaus-testnet.rhizom.me"
+polygon_private_key: "https://polygontestapi.terminet.io/rpc"
+polygon_rpc: "{some private key}"
+ipfs_token: "{some token}"
