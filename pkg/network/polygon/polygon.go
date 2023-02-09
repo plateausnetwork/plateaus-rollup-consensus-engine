@@ -9,25 +9,25 @@ import (
 
 const networkName = "polygon"
 
-type Service struct {
-	rpc *rpc.Client
+type LotteryValidationService struct {
+	rpc rpc.LotteryValidation
 }
 
-func NewService(r *rpc.Client) *Service {
-	return &Service{
+func NewLotteryValidationService(r rpc.LotteryValidation) *LotteryValidationService {
+	return &LotteryValidationService{
 		rpc: r,
 	}
 }
 
-func (s Service) GetNetworkName() string {
+func (s LotteryValidationService) GetNetworkName() string {
 	return networkName
 }
 
-func (s Service) Supports(network string) bool {
+func (s LotteryValidationService) Supports(network string) bool {
 	return s.GetNetworkName() == network
 }
 
-func (s Service) MintNFT(hash hash.Hash, lotteryValidation *nft.LotteryValidation, url string, minHeight, maxHeight int) error {
+func (s LotteryValidationService) MintNFT(hash hash.Hash, lotteryValidation *nft.LotteryValidation, url string, minHeight, maxHeight int) error {
 	if err := s.rpc.Mint(hash.String(), lotteryValidation.Encode(), url, int64(minHeight), int64(maxHeight)); err != nil {
 		return err
 	}
@@ -35,7 +35,7 @@ func (s Service) MintNFT(hash hash.Hash, lotteryValidation *nft.LotteryValidatio
 	return nil
 }
 
-func (s Service) WasMinted(hash hash.Hash) (bool, error) {
+func (s LotteryValidationService) WasMinted(hash hash.Hash) (bool, error) {
 	bal, err := s.rpc.BalanceOf()
 
 	if err != nil {
@@ -58,7 +58,8 @@ func (s Service) WasMinted(hash hash.Hash) (bool, error) {
 	return metadata.CheckHash(hash.String()), nil
 }
 
-func (s Service) GetAccountBalance() (int64, error) {
+//TODO: this method should not be here
+func (s LotteryValidationService) GetAccountBalance() (int64, error) {
 	balance, err := s.rpc.AccountBalance()
 
 	if err != nil {
@@ -66,4 +67,26 @@ func (s Service) GetAccountBalance() (int64, error) {
 	}
 
 	return balance, nil
+}
+
+// PlateausValidationService implementation of PlateausValidation
+type PlateausValidationService struct {
+	rpc rpc.PlateausValidation
+}
+
+func NewPlateausValidationService(r rpc.PlateausValidation) *PlateausValidationService {
+	return &PlateausValidationService{
+		rpc: r,
+	}
+}
+
+func (s PlateausValidationService) GetBalance() (int64, error) {
+	bal, err := s.rpc.BalanceOf()
+
+	if err != nil {
+		log.Printf("could not rpc.BalanceOf: %s", err)
+		return 0, err
+	}
+
+	return bal, nil
 }

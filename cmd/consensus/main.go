@@ -29,9 +29,27 @@ func main() {
 	}
 }
 
+func checkPermission(c *app.Container) bool {
+	log.Println("started plateaus validation")
+
+	bal, err := c.PlateausValidationService.GetBalance()
+
+	if err != nil {
+		return false
+	}
+
+	return bal > 0
+}
+
 func startSubscriber(c *app.Container, cfg *config.Config) {
 	for {
 		log.Println("started lottery subscriber")
+
+		if ok := checkPermission(c); !ok {
+			log.Printf("was not able to join on lottery")
+			<-time.After(1 * time.Minute)
+			continue
+		}
 
 		networks := c.LotteryManager.CheckNetworkBalances(cfg.Networks, cfg.MinAmount)
 
@@ -53,6 +71,12 @@ func startSubscriber(c *app.Container, cfg *config.Config) {
 func startRegister(c *app.Container, cfg *config.Config) {
 	for {
 		log.Println("started lottery processor")
+
+		if ok := checkPermission(c); !ok {
+			log.Printf("was not able to join on lottery")
+			<-time.After(1 * time.Minute)
+			continue
+		}
 
 		if err := c.LotteryManager.RegisterTx(cfg.Peer, cfg.Networks); err != nil {
 			log.Println(fmt.Sprintf("some error while app.m.Process: %s", err))

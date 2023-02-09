@@ -17,7 +17,7 @@ import (
 	httpDefault "github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/http"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/network/arbitrum"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/network/polygon"
-	contractPolygon "github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/network/polygon/contract"
+	contractPolygon "github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/network/polygon/contracts"
 	rpcPolygon "github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/network/polygon/rpc"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/plateaus/contract"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/plateaus/http"
@@ -29,11 +29,12 @@ import (
 )
 
 type Container struct {
-	PlateausHTTPClient *http.Client
-	PlateausRPCClient  *rpc.Client
-	LotteryManager     *lottery.Manager
-	NetworkDelegator   *network.Delegator
-	IPFSClient         ipfs.Client
+	PlateausHTTPClient        *http.Client
+	PlateausRPCClient         *rpc.Client
+	PlateausValidationService *polygon.PlateausValidationService
+	LotteryManager            *lottery.Manager
+	NetworkDelegator          *network.Delegator
+	IPFSClient                ipfs.Client
 }
 
 var container Container
@@ -112,19 +113,33 @@ func init() {
 		log.Fatal(err)
 	}
 
-	addressLotteryPolygon := common.HexToAddress(cfg.LotteryValidationContractAddress)
-	lotteryValidationContract, err := contractPolygon.NewLotteryValidation(addressLotteryPolygon, clientPolygon)
+	addressLotteryValidationPolygon := common.HexToAddress(cfg.LotteryValidationContractAddress)
+	lotteryValidationContract, err := contractPolygon.NewLotteryValidation(addressLotteryValidationPolygon, clientPolygon)
 
 	if err != nil {
 		log.Printf("could not contract.NewLotteryValidation: %s", err)
 		os.Exit(1)
 	}
 
-	polygonRPC := rpcPolygon.New(clientPolygon, chainIdPolygon, lotteryValidationContract, *fromAddressPolygon, privateKeyPolygon)
+	addressPlateausValidationPolygon := common.HexToAddress(cfg.PlateausValidationContractAddress)
+	plateausValidationContract, err := contractPolygon.NewPlateausValidation(addressPlateausValidationPolygon, clientPolygon)
+
+	if err != nil {
+		log.Printf("could not contract.NewLotteryValidation: %s", err)
+		os.Exit(1)
+	}
+
+	var lotteryValidationPolygonRPC rpcPolygon.LotteryValidation
+	lotteryValidationPolygonRPC = rpcPolygon.NewLotteryValidation(clientPolygon, chainIdPolygon, lotteryValidationContract, *fromAddressPolygon, privateKeyPolygon)
+
+	var plateausValidationPolygonRPC rpcPolygon.PlateausValidation
+	plateausValidationPolygonRPC = rpcPolygon.NewPlateausValidation(clientPolygon, chainIdPolygon, plateausValidationContract, *fromAddressPolygon, privateKeyPolygon)
+
+	container.PlateausValidationService = polygon.NewPlateausValidationService(plateausValidationPolygonRPC)
 
 	var networkServices = []network.Delegated{
 		arbitrum.Service{},
-		polygon.NewService(polygonRPC),
+		polygon.NewLotteryValidationService(lotteryValidationPolygonRPC),
 	}
 
 	delegatedNetworkServices := networkServices

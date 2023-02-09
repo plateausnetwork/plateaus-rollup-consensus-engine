@@ -6,21 +6,28 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/network/polygon/contract"
+	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/network/polygon/contracts"
 	"log"
 	"math/big"
 )
 
-type Client struct {
+type LotteryValidation interface {
+	Mint(hash string, img string, url string, minHeight, maxHeight int64) error
+	AccountBalance() (int64, error)
+	BalanceOf() (int64, error)
+	TokenURI(tokenID int64) (string, error)
+}
+
+type LotteryValidationClient struct {
 	rpcClient   *ethclient.Client
 	chainID     *big.Int
-	contract    *contract.LotteryValidation
+	contract    *contracts.LotteryValidation
 	fromAddress common.Address
 	privateKey  *ecdsa.PrivateKey
 }
 
-func New(rpc *ethclient.Client, chainId *big.Int, contract *contract.LotteryValidation, fromAddress common.Address, privateKey *ecdsa.PrivateKey) *Client {
-	return &Client{
+func NewLotteryValidation(rpc *ethclient.Client, chainId *big.Int, contract *contracts.LotteryValidation, fromAddress common.Address, privateKey *ecdsa.PrivateKey) LotteryValidation {
+	return &LotteryValidationClient{
 		rpcClient:   rpc,
 		chainID:     chainId,
 		contract:    contract,
@@ -29,7 +36,7 @@ func New(rpc *ethclient.Client, chainId *big.Int, contract *contract.LotteryVali
 	}
 }
 
-func (c Client) Mint(hash string, img string, url string, minHeight, maxHeight int64) error {
+func (c LotteryValidationClient) Mint(hash string, img string, url string, minHeight, maxHeight int64) error {
 	auth, err := c.createAuth()
 
 	if err != nil {
@@ -51,7 +58,7 @@ func (c Client) Mint(hash string, img string, url string, minHeight, maxHeight i
 	return nil
 }
 
-func (c Client) AccountBalance() (int64, error) {
+func (c LotteryValidationClient) AccountBalance() (int64, error) {
 	balance, err := c.rpcClient.BalanceAt(context.TODO(), c.fromAddress, nil)
 
 	if err != nil {
@@ -62,7 +69,7 @@ func (c Client) AccountBalance() (int64, error) {
 	return balance.Int64(), nil
 }
 
-func (c Client) BalanceOf() (int64, error) {
+func (c LotteryValidationClient) BalanceOf() (int64, error) {
 	balance, err := c.contract.BalanceOf(nil, c.fromAddress)
 
 	if err != nil {
@@ -74,7 +81,7 @@ func (c Client) BalanceOf() (int64, error) {
 	return balance.Int64(), nil
 }
 
-func (c Client) TokenURI(tokenID int64) (string, error) {
+func (c LotteryValidationClient) TokenURI(tokenID int64) (string, error) {
 	bigTokenID := big.NewInt(tokenID)
 	tokenURI, err := c.contract.TokenURI(nil, bigTokenID)
 
@@ -88,7 +95,7 @@ func (c Client) TokenURI(tokenID int64) (string, error) {
 }
 
 //TODO: duplicated from pkg/plateaus/rpc/client.go fix this!
-func (c Client) createAuth() (*bind.TransactOpts, error) {
+func (c LotteryValidationClient) createAuth() (*bind.TransactOpts, error) {
 	auth, err := bind.NewKeyedTransactorWithChainID(c.privateKey, c.chainID)
 
 	if err != nil {
