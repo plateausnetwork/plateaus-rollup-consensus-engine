@@ -16,7 +16,7 @@ type Register interface {
 	GetLotteryWinners(peer string) (string, error)
 	IsClosed() (bool, error)
 	PickWinner() error
-	GenerateRoot(latestBlocks *SubscribeBlocks, network string) (hash.Hash, *map[string]string, error)
+	GenerateRoot(latestBlocks *SubscribeBlocks) (hash.Hash, *map[string]string, error)
 }
 
 type RegisterService struct {
@@ -24,6 +24,9 @@ type RegisterService struct {
 	rpc  plateaus.RPCClient
 	hg   hash.Generator
 }
+
+// Verifying interface Compliance
+var _ Register = (*RegisterService)(nil)
 
 // NewRegisterService returns a new LotterySubscriber lottery.RegisterService
 func NewRegisterService(c plateaus.HTTPClient, r plateaus.RPCClient, hg hash.Generator) Register {
@@ -34,7 +37,7 @@ func NewRegisterService(c plateaus.HTTPClient, r plateaus.RPCClient, hg hash.Gen
 	}
 }
 
-func (r RegisterService) GenerateRoot(subscribeBlocks *SubscribeBlocks, network string) (hash.Hash, *map[string]string, error) {
+func (r RegisterService) GenerateRoot(subscribeBlocks *SubscribeBlocks) (hash.Hash, *map[string]string, error) {
 	mtxs, err := r.getTransactions(subscribeBlocks.GetCurrentMinHeight(), subscribeBlocks.GetCurrentMaxHeight(), 0)
 
 	if err != nil {

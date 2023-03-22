@@ -3,6 +3,7 @@ package web3storage
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/web3-storage/go-w3s-client"
 	"log"
@@ -35,7 +36,9 @@ func (c Client) Put(ctx context.Context, txs *map[string]string) (string, error)
 	tempDir := fmt.Sprintf("%s/%s", os.TempDir(), "plateaus-consensus")
 
 	if err := os.Mkdir(tempDir, os.ModePerm); err != nil {
-		log.Printf("could not os.Mkdir: %s", err)
+		if !errors.Is(err, os.ErrExist) {
+			log.Printf("could not os.Mkdir: %s", err)
+		}
 	}
 
 	f, err := os.CreateTemp(tempDir, "*-plateaus-consensus")

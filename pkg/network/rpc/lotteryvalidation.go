@@ -6,7 +6,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/network/polygon/contracts"
+	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/network/contracts"
 	"log"
 	"math/big"
 )
@@ -94,7 +94,7 @@ func (c LotteryValidationClient) TokenURI(tokenID int64) (string, error) {
 	return tokenURI, nil
 }
 
-//TODO: duplicated from pkg/plateaus/rpc/client.go fix this!
+// TODO: duplicated from pkg/plateaus/rpc/client.go fix this!
 func (c LotteryValidationClient) createAuth() (*bind.TransactOpts, error) {
 	auth, err := bind.NewKeyedTransactorWithChainID(c.privateKey, c.chainID)
 

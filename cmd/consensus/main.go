@@ -51,7 +51,7 @@ func startSubscriber(c *app.Container, cfg *config.Config) {
 			continue
 		}
 
-		networks := c.LotteryManager.CheckNetworkBalances(cfg.Networks, cfg.MinAmount)
+		networks := c.LotteryManager.CheckNetworkBalances(cfg.Networks)
 
 		if len(networks) <= 0 {
 			log.Printf("none networks to participate from lottery")

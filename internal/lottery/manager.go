@@ -5,6 +5,7 @@ package lottery
 import (
 	"context"
 	"errors"
+	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/config"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/database"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/ipfs"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/network"
@@ -61,8 +62,8 @@ func (m Manager) SubscribePeer(peer string, networks []string) error {
 	return nil
 }
 
-func (m Manager) RegisterTx(peer string, networks []string) error {
-	log.Printf("lottery register txs: %s", networks)
+func (m Manager) RegisterTx(peer string, networks []config.Network) error {
+	log.Printf("lottery register txs: %v", networks)
 
 	if ok, err := m.r.IsClosed(); !ok || err != nil {
 		return err
@@ -94,7 +95,7 @@ func (m Manager) RegisterTx(peer string, networks []string) error {
 
 	subscribeBlocks := NewSubscribeBlocks(latestBlock.GetHeight(), data.LastBlockSubscribed, database.EachBlock)
 
-	r, txsMapped, err := m.r.GenerateRoot(subscribeBlocks, networkWinner)
+	r, txsMapped, err := m.r.GenerateRoot(subscribeBlocks)
 
 	if err != nil {
 		return err
@@ -119,19 +120,19 @@ func (m Manager) RegisterTx(peer string, networks []string) error {
 	return nil
 }
 
-func (m Manager) CheckNetworkBalances(networks []string, minAmount float64) []string {
+func (m Manager) CheckNetworkBalances(networks []config.Network) []string {
 	var allowedNetworks []string
 
 	for _, n := range networks {
 		//TODO: could be executed in parallel
-		balance, err := m.dn.GetAccountBalance(n)
+		balance, err := m.dn.GetAccountBalance(n.Name)
 
-		if balance <= minAmount || err != nil {
-			log.Printf("%s balance account is less than min amount desired: current %d - min: %f", n, balance, minAmount)
+		if balance <= n.MinAmount || err != nil {
+			log.Printf("%s balance account is less than min amount desired: current %f - min: %f", n.Name, balance, n.MinAmount)
 			continue
 		}
 
-		allowedNetworks = append(allowedNetworks, n)
+		allowedNetworks = append(allowedNetworks, n.Name)
 	}
 
 	return allowedNetworks

@@ -5,6 +5,8 @@ import (
 	"log"
 )
 
+type Dialer func(url string) (*ethclient.Client, error)
+
 func Dial(url string) (*ethclient.Client, error) {
 	client, err := ethclient.Dial(url)
 	defer client.Close()

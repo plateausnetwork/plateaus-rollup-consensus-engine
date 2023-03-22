@@ -6,19 +6,13 @@ import (
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/config"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/ipfs"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/lottery"
-	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/lottery/nft"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/network"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/database/filesystem"
-	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/dicebear"
-	httpDicebear "github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/dicebear/http"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/ethereum"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/ethereum/crypto"
 	merkletree "github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/hash"
 	httpDefault "github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/http"
-	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/network/arbitrum"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/network/polygon"
-	contractPolygon "github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/network/polygon/contracts"
-	rpcPolygon "github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/network/polygon/rpc"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/plateaus/contract"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/plateaus/http"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/plateaus/rpc"
@@ -40,6 +34,7 @@ type Container struct {
 var container Container
 
 // TODO: decouple this container.go in many other providers separated by context
+// TODO: move from app/container.go to app/container/container.go and networks.go too
 func init() {
 	ctx := context.Background()
 	cfg := config.GetConfig()
@@ -71,7 +66,7 @@ func init() {
 		os.Exit(1)
 	}
 
-	addressLotteryPlateaus := common.HexToAddress(cfg.LotteryContractAddress)
+	addressLotteryPlateaus := common.HexToAddress(cfg.PlateausLotteryContractAddress)
 	lotteryContract, err := contract.NewLottery(addressLotteryPlateaus, clientPlateaus)
 
 	if err != nil {
@@ -92,67 +87,10 @@ func init() {
 	s := lottery.NewService(container.PlateausHTTPClient, container.PlateausRPCClient, dr, tf)
 	r := lottery.NewRegisterService(container.PlateausHTTPClient, container.PlateausRPCClient, tf)
 
-	// RPC Polygon
-	clientPolygon, err := ethereum.Dial(cfg.PolygonRPC)
+	// Register Networks
+	registerNetworks(ctx, cfg)
 
-	if err != nil {
-		log.Printf("could not ethereum.Dial on Polygon: %s", err)
-		os.Exit(1)
-	}
-
-	chainIdPolygon, err := clientPolygon.ChainID(ctx)
-
-	if err != nil {
-		log.Printf("could not client.ChainID: %s", err)
-		os.Exit(1)
-	}
-
-	fromAddressPolygon, privateKeyPolygon, err := crypto.AddressFromPrivateKey(cfg.PlateausPrivateKey)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	addressLotteryValidationPolygon := common.HexToAddress(cfg.LotteryValidationContractAddress)
-	lotteryValidationContract, err := contractPolygon.NewLotteryValidation(addressLotteryValidationPolygon, clientPolygon)
-
-	if err != nil {
-		log.Printf("could not contract.NewLotteryValidation: %s", err)
-		os.Exit(1)
-	}
-
-	addressPlateausValidationPolygon := common.HexToAddress(cfg.PlateausValidationContractAddress)
-	plateausValidationContract, err := contractPolygon.NewPlateausValidation(addressPlateausValidationPolygon, clientPolygon)
-
-	if err != nil {
-		log.Printf("could not contract.NewLotteryValidation: %s", err)
-		os.Exit(1)
-	}
-
-	var lotteryValidationPolygonRPC rpcPolygon.LotteryValidation
-	lotteryValidationPolygonRPC = rpcPolygon.NewLotteryValidation(clientPolygon, chainIdPolygon, lotteryValidationContract, *fromAddressPolygon, privateKeyPolygon)
-
-	var plateausValidationPolygonRPC rpcPolygon.PlateausValidation
-	plateausValidationPolygonRPC = rpcPolygon.NewPlateausValidation(clientPolygon, chainIdPolygon, plateausValidationContract, *fromAddressPolygon, privateKeyPolygon)
-
-	container.PlateausValidationService = polygon.NewPlateausValidationService(plateausValidationPolygonRPC)
-
-	var networkServices = []network.Delegated{
-		arbitrum.Service{},
-		polygon.NewLotteryValidationService(lotteryValidationPolygonRPC),
-	}
-
-	delegatedNetworkServices := networkServices
-
-	var imageGenerators []nft.ImageGenerator
-
-	imageGenerators = append(imageGenerators, dicebear.NewService(httpDicebear.NewClient(c)))
-	imageGenerators = append(imageGenerators, nft.DefaultImageGenerator{})
-
-	d := network.NewDelegator(delegatedNetworkServices, imageGenerators)
-
-	container.NetworkDelegator = d
-
+	// LotteryManager
 	ipfsClient, err := web3storage.NewClient(cfg.IPFSToken)
 	if err != nil {
 		log.Printf("could not web3storage.NewClient: %s", err)
@@ -161,7 +99,7 @@ func init() {
 
 	ipfsService := ipfs.NewService(ipfsClient)
 
-	container.LotteryManager = lottery.NewManager(s, r, d, dr, ipfsService)
+	container.LotteryManager = lottery.NewManager(s, r, container.NetworkDelegator, dr, ipfsService)
 }
 
 func GetContainer() *Container {

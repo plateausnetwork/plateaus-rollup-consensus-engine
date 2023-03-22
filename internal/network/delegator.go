@@ -15,7 +15,7 @@ import (
 
 type Delegated interface {
 	GetAccountBalance() (int64, error)
-	GetNetworkName() string
+	GetNetwork() string
 	MintNFT(hash hash.Hash, lotteryValidation *nft.LotteryValidation, url string, minHeight, maxHeight int) error
 	WasMinted(hash hash.Hash) (bool, error)
 	Supports(network string) bool
