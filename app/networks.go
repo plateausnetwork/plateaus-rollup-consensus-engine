@@ -24,40 +24,24 @@ import (
 )
 
 func registerNetworks(ctx context.Context, cfg *config.Config) {
-	registerPlateausNodeValidator(ctx, cfg.PolygonRPC, cfg.PolygonPrivateKey, cfg.PlateausNodeValidatorContractAddress)
-
-	var polygonLotteryValidationRPC rpc.LotteryValidation
-	var zksyncLotteryValidationRPC rpc.LotteryValidation
-	var scrollLotteryValidationRPC rpc.LotteryValidation
-
 	wg := sync.WaitGroup{}
-	wg.Add(3)
+	wg.Add(len(cfg.Networks))
 
-	//TODO: create config.networks[] and change this piece of code for a loop on this array
-	go func(lv *rpc.LotteryValidation) {
-		*lv = registerNetwork(ctx, cfg.PolygonPrivateKey, cfg.PolygonRPC, cfg.PolygonLotteryValidationContractAddress)
-		wg.Done()
-	}(&polygonLotteryValidationRPC)
+	var delegatedNetworkServices []network.Delegated
 
-	go func(lv *rpc.LotteryValidation) {
-		*lv = registerNetwork(ctx, cfg.ZKSyncPrivateKey, cfg.ZKSyncRPC, cfg.ZKSynckLotteryValidationContractAddress)
-		wg.Done()
-	}(&zksyncLotteryValidationRPC)
+	for _, n := range cfg.Networks {
+		if n.Name == externalnetwork.Polygon {
+			registerPlateausNodeValidator(ctx, n.RPC, n.GetPrivateKey(), cfg.PlateausNodeValidatorContractAddress)
+		}
 
-	go func(lv *rpc.LotteryValidation) {
-		*lv = registerNetwork(ctx, cfg.ScrollPrivateKey, cfg.ScrollRPC, cfg.ScrollLotteryValidationContractAddress)
-		wg.Done()
-	}(&scrollLotteryValidationRPC)
-
-	wg.Wait()
-
-	var networkServices = []network.Delegated{
-		externalnetwork.NewLotteryValidationService(externalnetwork.Polygon, polygonLotteryValidationRPC),
-		externalnetwork.NewLotteryValidationService(externalnetwork.ZKSync, zksyncLotteryValidationRPC),
-		externalnetwork.NewLotteryValidationService(externalnetwork.Scroll, scrollLotteryValidationRPC),
+		go func(n config.Network) {
+			lv := registerNetwork(ctx, n.GetPrivateKey(), n.RPC, n.GetLotteryValidationContractAddress())
+			delegatedNetworkServices = append(delegatedNetworkServices, externalnetwork.NewLotteryValidationService(n.Name, lv))
+			wg.Done()
+		}(n)
 	}
 
-	delegatedNetworkServices := networkServices
+	wg.Wait()
 
 	c := &httpDefault.Client{}
 	c.Timeout = 10 * time.Second

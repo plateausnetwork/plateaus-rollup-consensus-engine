@@ -5,8 +5,6 @@ import (
 	"log"
 )
 
-const NetworkName = "polygon"
-
 // PlateausValidationService implementation of PlateausValidation
 type PlateausValidationService struct {
 	rpc rpc.PlateausValidation
