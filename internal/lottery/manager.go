@@ -10,6 +10,7 @@ import (
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/ipfs"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/network"
 	"log"
+	"sync"
 )
 
 type Manager struct {
@@ -63,7 +64,7 @@ func (m Manager) SubscribePeer(peer string, networks []string) error {
 }
 
 func (m Manager) RegisterTx(peer string, networks []config.Network) error {
-	log.Printf("lottery register txs: %v", networks)
+	log.Printf("lottery register txs: %d", len(networks))
 
 	if ok, err := m.r.IsClosed(); !ok || err != nil {
 		return err
@@ -122,18 +123,26 @@ func (m Manager) RegisterTx(peer string, networks []config.Network) error {
 
 func (m Manager) CheckNetworkBalances(networks []config.Network) []string {
 	var allowedNetworks []string
+	wg := sync.WaitGroup{}
+	wg.Add(len(networks))
 
 	for _, n := range networks {
-		//TODO: could be executed in parallel
-		balance, err := m.dn.GetAccountBalance(n.Name)
+		go func(n config.Network, allowedNetworks *[]string) {
+			balance, err := m.dn.GetAccountBalance(n.Name)
 
-		if balance <= n.MinAmount || err != nil {
-			log.Printf("%s balance account is less than min amount desired: current %f - min: %f", n.Name, balance, n.MinAmount)
-			continue
-		}
+			if balance <= n.MinAmount || err != nil {
+				log.Printf("%s balance account is less than min amount desired: current %f - min: %f", n.Name, balance, n.MinAmount)
+				wg.Done()
+				return
+			}
 
-		allowedNetworks = append(allowedNetworks, n.Name)
+			*allowedNetworks = append(*allowedNetworks, n.Name)
+
+			wg.Done()
+		}(n, &allowedNetworks)
 	}
+
+	wg.Wait()
 
 	return allowedNetworks
 }
