@@ -10,7 +10,6 @@ type Service struct {
 }
 
 func NewService(c *http.Client) *Service {
-	// TODO: high coupling with http.Client
 	return &Service{
 		c: c,
 	}

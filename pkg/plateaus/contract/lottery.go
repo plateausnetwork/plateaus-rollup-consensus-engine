@@ -36,7 +36,7 @@ type Struct0 struct {
 
 // LotteryMetaData contains all meta data concerning the Lottery contract.
 var LotteryMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"constructor\",\"payable\":false,\"inputs\":[]},{\"type\":\"function\",\"name\":\"currentLottery\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"getCurrentSub\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"tuple[]\",\"components\":[{\"type\":\"address\",\"name\":\"addr\"},{\"type\":\"string\",\"name\":\"network\"}]}]},{\"type\":\"function\",\"name\":\"getCurrentWinners\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"tuple[]\",\"components\":[{\"type\":\"address\",\"name\":\"addr\"},{\"type\":\"string\",\"name\":\"network\"}]}]},{\"type\":\"function\",\"name\":\"isClosed\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\",\"name\":\"dateNow\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"isOpen\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\",\"name\":\"dateNow\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"lastLottery\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"lotteries\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\"}],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"subscribe\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"wasPicked\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"winner\",\"constant\":false,\"payable\":false,\"inputs\":[],\"outputs\":[]}]",
+	ABI: "[{\"type\":\"constructor\",\"payable\":false,\"inputs\":[]},{\"type\":\"function\",\"name\":\"_validateNetwork\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"addNetwork\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"currentLottery\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"getAllowedNetworks\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"string[]\"}]},{\"type\":\"function\",\"name\":\"getCurrentSub\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"tuple[]\",\"components\":[{\"type\":\"address\",\"name\":\"addr\"},{\"type\":\"string\",\"name\":\"network\"}]}]},{\"type\":\"function\",\"name\":\"getCurrentWinners\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"tuple[]\",\"components\":[{\"type\":\"address\",\"name\":\"addr\"},{\"type\":\"string\",\"name\":\"network\"}]}]},{\"type\":\"function\",\"name\":\"isClosed\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\",\"name\":\"dateNow\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"isOpen\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\",\"name\":\"dateNow\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"lastLottery\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"lotteries\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\"}],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"removeNetwork\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"subscribe\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"wasPicked\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"winner\",\"constant\":false,\"payable\":false,\"inputs\":[],\"outputs\":[]}]",
 }
 
 // LotteryABI is the input ABI used to generate the binding from.
@@ -185,6 +185,37 @@ func (_Lottery *LotteryTransactorRaw) Transact(opts *bind.TransactOpts, method s
 	return _Lottery.Contract.contract.Transact(opts, method, params...)
 }
 
+// ValidateNetwork is a free data retrieval call binding the contract method 0xaa21f52c.
+//
+// Solidity: function _validateNetwork(string network) view returns(bool)
+func (_Lottery *LotteryCaller) ValidateNetwork(opts *bind.CallOpts, network string) (bool, error) {
+	var out []interface{}
+	err := _Lottery.contract.Call(opts, &out, "_validateNetwork", network)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
+}
+
+// ValidateNetwork is a free data retrieval call binding the contract method 0xaa21f52c.
+//
+// Solidity: function _validateNetwork(string network) view returns(bool)
+func (_Lottery *LotterySession) ValidateNetwork(network string) (bool, error) {
+	return _Lottery.Contract.ValidateNetwork(&_Lottery.CallOpts, network)
+}
+
+// ValidateNetwork is a free data retrieval call binding the contract method 0xaa21f52c.
+//
+// Solidity: function _validateNetwork(string network) view returns(bool)
+func (_Lottery *LotteryCallerSession) ValidateNetwork(network string) (bool, error) {
+	return _Lottery.Contract.ValidateNetwork(&_Lottery.CallOpts, network)
+}
+
 // CurrentLottery is a free data retrieval call binding the contract method 0x2bd56b06.
 //
 // Solidity: function currentLottery() view returns(uint256 id, uint256 start_date, uint256 finish_date)
@@ -233,6 +264,37 @@ func (_Lottery *LotteryCallerSession) CurrentLottery() (struct {
 	FinishDate *big.Int
 }, error) {
 	return _Lottery.Contract.CurrentLottery(&_Lottery.CallOpts)
+}
+
+// GetAllowedNetworks is a free data retrieval call binding the contract method 0x6d6217e3.
+//
+// Solidity: function getAllowedNetworks() view returns(string[])
+func (_Lottery *LotteryCaller) GetAllowedNetworks(opts *bind.CallOpts) ([]string, error) {
+	var out []interface{}
+	err := _Lottery.contract.Call(opts, &out, "getAllowedNetworks")
+
+	if err != nil {
+		return *new([]string), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new([]string)).(*[]string)
+
+	return out0, err
+
+}
+
+// GetAllowedNetworks is a free data retrieval call binding the contract method 0x6d6217e3.
+//
+// Solidity: function getAllowedNetworks() view returns(string[])
+func (_Lottery *LotterySession) GetAllowedNetworks() ([]string, error) {
+	return _Lottery.Contract.GetAllowedNetworks(&_Lottery.CallOpts)
+}
+
+// GetAllowedNetworks is a free data retrieval call binding the contract method 0x6d6217e3.
+//
+// Solidity: function getAllowedNetworks() view returns(string[])
+func (_Lottery *LotteryCallerSession) GetAllowedNetworks() ([]string, error) {
+	return _Lottery.Contract.GetAllowedNetworks(&_Lottery.CallOpts)
 }
 
 // GetCurrentSub is a free data retrieval call binding the contract method 0xaa180910.
@@ -488,6 +550,48 @@ func (_Lottery *LotterySession) WasPicked() (bool, error) {
 // Solidity: function wasPicked() view returns(bool)
 func (_Lottery *LotteryCallerSession) WasPicked() (bool, error) {
 	return _Lottery.Contract.WasPicked(&_Lottery.CallOpts)
+}
+
+// AddNetwork is a paid mutator transaction binding the contract method 0x91ef7357.
+//
+// Solidity: function addNetwork(string network) returns()
+func (_Lottery *LotteryTransactor) AddNetwork(opts *bind.TransactOpts, network string) (*types.Transaction, error) {
+	return _Lottery.contract.Transact(opts, "addNetwork", network)
+}
+
+// AddNetwork is a paid mutator transaction binding the contract method 0x91ef7357.
+//
+// Solidity: function addNetwork(string network) returns()
+func (_Lottery *LotterySession) AddNetwork(network string) (*types.Transaction, error) {
+	return _Lottery.Contract.AddNetwork(&_Lottery.TransactOpts, network)
+}
+
+// AddNetwork is a paid mutator transaction binding the contract method 0x91ef7357.
+//
+// Solidity: function addNetwork(string network) returns()
+func (_Lottery *LotteryTransactorSession) AddNetwork(network string) (*types.Transaction, error) {
+	return _Lottery.Contract.AddNetwork(&_Lottery.TransactOpts, network)
+}
+
+// RemoveNetwork is a paid mutator transaction binding the contract method 0x3d30bb4e.
+//
+// Solidity: function removeNetwork(string network) returns()
+func (_Lottery *LotteryTransactor) RemoveNetwork(opts *bind.TransactOpts, network string) (*types.Transaction, error) {
+	return _Lottery.contract.Transact(opts, "removeNetwork", network)
+}
+
+// RemoveNetwork is a paid mutator transaction binding the contract method 0x3d30bb4e.
+//
+// Solidity: function removeNetwork(string network) returns()
+func (_Lottery *LotterySession) RemoveNetwork(network string) (*types.Transaction, error) {
+	return _Lottery.Contract.RemoveNetwork(&_Lottery.TransactOpts, network)
+}
+
+// RemoveNetwork is a paid mutator transaction binding the contract method 0x3d30bb4e.
+//
+// Solidity: function removeNetwork(string network) returns()
+func (_Lottery *LotteryTransactorSession) RemoveNetwork(network string) (*types.Transaction, error) {
+	return _Lottery.Contract.RemoveNetwork(&_Lottery.TransactOpts, network)
 }
 
 // Subscribe is a paid mutator transaction binding the contract method 0x507e7888.
