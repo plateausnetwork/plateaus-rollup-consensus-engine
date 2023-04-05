@@ -40,6 +40,7 @@ func (s SubscribeService) Subscribe(height int, peer string, networks []string) 
 	log.Printf("started to subscribe peer: %s on netowkrs %s", peer, networks)
 
 	for _, network := range networks {
+		//TODO: can be executed in parallel
 		if err := s.rpc.Subscribe(network); err != nil {
 			log.Printf("could not subscribe peer %s on network: %s - %s", peer, network, err)
 

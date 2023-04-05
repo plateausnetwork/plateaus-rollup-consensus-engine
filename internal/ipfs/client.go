@@ -7,5 +7,5 @@ import (
 )
 
 type Client interface {
-	Put(ctx context.Context, txs *map[string]string) (string, error)
+	Put(ctx context.Context, name string, content []byte) (string, error)
 }

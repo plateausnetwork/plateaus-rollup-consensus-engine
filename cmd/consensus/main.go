@@ -20,6 +20,7 @@ func main() {
 	container := app.GetContainer()
 	cfg := config.GetConfig()
 
+	//TODO: create a state machine to control the flow
 	go startSubscriber(container, cfg)
 	go startRegister(container, cfg)
 
@@ -78,7 +79,15 @@ func startRegister(c *app.Container, cfg *config.Config) {
 			continue
 		}
 
-		if err := c.LotteryManager.RegisterTx(cfg.Peer, cfg.Networks); err != nil {
+		networks := c.LotteryManager.CheckNetworkBalances(cfg.Networks)
+
+		if len(networks) <= 0 {
+			log.Printf("none networks to participate from lottery")
+			<-time.After(1 * time.Minute)
+			continue
+		}
+
+		if err := c.LotteryManager.RegisterTx(cfg.Peer, networks); err != nil {
 			log.Println(fmt.Sprintf("some error while app.m.Process: %s", err))
 		}
 

@@ -36,7 +36,7 @@ func NewLotteryValidation(rpc *ethclient.Client, chainId *big.Int, contract *con
 	}
 }
 
-func (c LotteryValidationClient) Mint(hash string, img string, url string, minHeight, maxHeight int64) error {
+func (c LotteryValidationClient) Mint(hash string, imgURL string, url string, minHeight, maxHeight int64) error {
 	auth, err := c.createAuth()
 
 	if err != nil {
@@ -46,7 +46,7 @@ func (c LotteryValidationClient) Mint(hash string, img string, url string, minHe
 	bigMinHeight := big.NewInt(minHeight)
 	bigMaxHeight := big.NewInt(maxHeight)
 
-	tx, err := c.contract.Mint(auth, img, hash, url, bigMinHeight, bigMaxHeight)
+	tx, err := c.contract.Mint(auth, imgURL, hash, url, bigMinHeight, bigMaxHeight)
 
 	if err != nil {
 		log.Printf("could not mint peer to network %s: %s", hash, err)
@@ -103,6 +103,7 @@ func (c LotteryValidationClient) createAuth() (*bind.TransactOpts, error) {
 		return nil, err
 	}
 
+	//auth.GasPrice = big.NewInt(0)
 	auth.Value = big.NewInt(0)
 
 	return auth, nil

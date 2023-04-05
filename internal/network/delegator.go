@@ -16,7 +16,7 @@ import (
 type Delegated interface {
 	GetAccountBalance() (int64, error)
 	GetNetwork() string
-	MintNFT(hash hash.Hash, lotteryValidation *nft.LotteryValidation, url string, minHeight, maxHeight int) error
+	MintNFT(hash hash.Hash, imgURL, url string, minHeight, maxHeight int) error
 	WasMinted(hash hash.Hash) (bool, error)
 	Supports(network string) bool
 }
@@ -57,20 +57,14 @@ func (d Delegator) GetAccountBalance(network string) (float64, error) {
 	return 0, nil
 }
 
-func (d Delegator) MintNFT(network string, hash hash.Hash, url string, minHeight, maxHeight int) error {
+func (d Delegator) MintNFT(network string, hash hash.Hash, imgURL, url string, minHeight, maxHeight int) error {
 	for _, s := range d.networkServices {
 		if s.Supports(network) == false {
-			log.Printf("could not register NFT on %s because network is not supported by %s", network, reflect.TypeOf(s))
+			log.Printf("could not register NFT on %s because network is not supported by %s", network, s.GetNetwork())
 			continue
 		}
 
-		lotteryValidation, err := d.generateImageLotteryValidation(hash)
-
-		if err != nil {
-			return err
-		}
-
-		if err := s.MintNFT(hash, lotteryValidation, url, minHeight, maxHeight); err != nil {
+		if err := s.MintNFT(hash, imgURL, url, minHeight, maxHeight); err != nil {
 			log.Printf("MintNFT %s: %s", network, err)
 			return err
 		}
@@ -83,7 +77,7 @@ func (d Delegator) MintNFT(network string, hash hash.Hash, url string, minHeight
 	return nil
 }
 
-func (d Delegator) generateImageLotteryValidation(h hash.Hash) (*nft.LotteryValidation, error) {
+func (d Delegator) GenerateImageLotteryValidation(h hash.Hash) (*nft.LotteryValidation, error) {
 	// TODO: implement a way to treat error and generate usgin default image generator (DefaultImageGenerator)
 	for _, generator := range d.imageGenerators {
 		img, err := generator.Generate(h.String())

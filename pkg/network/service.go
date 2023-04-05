@@ -31,8 +31,8 @@ func (s LotteryValidationService) Supports(network string) bool {
 	return s.GetNetwork() == network
 }
 
-func (s LotteryValidationService) MintNFT(hash hash.Hash, lotteryValidation *nft.LotteryValidation, url string, minHeight, maxHeight int) error {
-	if err := s.rpc.Mint(hash.String(), lotteryValidation.Encode(), url, int64(minHeight), int64(maxHeight)); err != nil {
+func (s LotteryValidationService) MintNFT(hash hash.Hash, imgURL, url string, minHeight, maxHeight int) error {
+	if err := s.rpc.Mint(hash.String(), imgURL, url, int64(minHeight), int64(maxHeight)); err != nil {
 		return err
 	}
 
@@ -41,6 +41,10 @@ func (s LotteryValidationService) MintNFT(hash hash.Hash, lotteryValidation *nft
 
 func (s LotteryValidationService) WasMinted(hash hash.Hash) (bool, error) {
 	bal, err := s.rpc.BalanceOf()
+
+	if bal == 0 {
+		return false, nil
+	}
 
 	if err != nil {
 		return true, err

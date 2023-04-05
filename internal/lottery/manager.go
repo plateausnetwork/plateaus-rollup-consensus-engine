@@ -63,7 +63,8 @@ func (m Manager) SubscribePeer(peer string, networks []string) error {
 	return nil
 }
 
-func (m Manager) RegisterTx(peer string, networks []config.Network) error {
+// TODO: refactor that function
+func (m Manager) RegisterTx(peer string, networks []string) error {
 	log.Printf("lottery register txs: %d", len(networks))
 
 	if ok, err := m.r.IsClosed(); !ok || err != nil {
@@ -82,6 +83,7 @@ func (m Manager) RegisterTx(peer string, networks []config.Network) error {
 		return err
 	}
 
+	// TODO: can be used buffered channels for it m.s.GetLatestBlock and m.dr.Get
 	latestBlock, err := m.s.GetLatestBlock()
 
 	if err != nil {
@@ -108,13 +110,25 @@ func (m Manager) RegisterTx(peer string, networks []config.Network) error {
 
 	log.Printf("nft can be minted: %s", r)
 
-	url, err := m.ipfs.Upload(context.TODO(), txsMapped)
+	txsURL, err := m.ipfs.UploadConsensusData(context.TODO(), txsMapped)
 
 	if err != nil {
 		return err
 	}
 
-	if err := m.dn.MintNFT(networkWinner, r, url, subscribeBlocks.GetCurrentMinHeight(), subscribeBlocks.GetCurrentMaxHeight()); err != nil {
+	imgBytes, err := m.dn.GenerateImageLotteryValidation(r)
+
+	if err != nil {
+		return err
+	}
+
+	imageURL, err := m.ipfs.UploadImage(context.TODO(), imgBytes.Image)
+
+	if err != nil {
+		return err
+	}
+
+	if err := m.dn.MintNFT(networkWinner, r, imageURL, txsURL, subscribeBlocks.GetCurrentMinHeight(), subscribeBlocks.GetCurrentMaxHeight()); err != nil {
 		return err
 	}
 

@@ -2,7 +2,6 @@ package web3storage
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/web3-storage/go-w3s-client"
@@ -32,7 +31,7 @@ func NewClient(token string) (*Client, error) {
 	return c, nil
 }
 
-func (c Client) Put(ctx context.Context, txs *map[string]string) (string, error) {
+func (c Client) Put(ctx context.Context, name string, content []byte) (string, error) {
 	tempDir := fmt.Sprintf("%s/%s", os.TempDir(), "plateaus-consensus")
 
 	if err := os.Mkdir(tempDir, os.ModePerm); err != nil {
@@ -41,21 +40,14 @@ func (c Client) Put(ctx context.Context, txs *map[string]string) (string, error)
 		}
 	}
 
-	f, err := os.CreateTemp(tempDir, "*-plateaus-consensus")
+	f, err := os.CreateTemp(tempDir, fmt.Sprintf("*-%s", name))
 
 	if err != nil {
 		log.Printf("could not os.CreateTemp: %s", err)
 		return "", err
 	}
 
-	txsBytes, err := json.Marshal(txs)
-
-	if err != nil {
-		log.Printf("could not json.Marshal: %s", err)
-		return "", err
-	}
-
-	if _, err := f.Write(txsBytes); err != nil {
+	if _, err := f.Write(content); err != nil {
 		log.Printf("could no f.Write: %s", err)
 		return "", err
 	}
