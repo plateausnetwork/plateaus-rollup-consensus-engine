@@ -13,7 +13,7 @@ type RPCClient interface {
 	IsClosed(date time.Time) (bool, error)
 	IsOpen(date time.Time) (bool, error)
 	WasPicked() (bool, error)
-	Subscribe(network string) error
+	Subscribe(network []string) error
 	PickWinner() error
 	GetLotteryWinners() (string, error)
 }

@@ -39,13 +39,10 @@ func NewService(http plateaus.HTTPClient, rpc plateaus.RPCClient, dr database.Da
 func (s SubscribeService) Subscribe(height int, peer string, networks []string) error {
 	log.Printf("started to subscribe peer: %s on netowkrs %s", peer, networks)
 
-	for _, network := range networks {
-		//TODO: can be executed in parallel
-		if err := s.rpc.Subscribe(network); err != nil {
-			log.Printf("could not subscribe peer %s on network: %s - %s", peer, network, err)
+	if err := s.rpc.Subscribe(networks); err != nil {
+		log.Printf("could not subscribe peer %s on network: %s - %s", peer, networks, err)
 
-			return err
-		}
+		return err
 	}
 
 	err := s.dr.Store(&database.Data{

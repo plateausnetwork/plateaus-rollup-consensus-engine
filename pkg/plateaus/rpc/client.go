@@ -26,21 +26,21 @@ func New(chainId *big.Int, contract *contract.Lottery, fromAddress common.Addres
 	}
 }
 
-func (c Client) Subscribe(network string) error {
+func (c Client) Subscribe(networks []string) error {
 	auth, err := c.createAuth()
 
 	if err != nil {
 		return err
 	}
 
-	tx, err := c.contract.Subscribe(auth, network)
+	tx, err := c.contract.Subscribe(auth, networks)
 
 	if err != nil {
-		log.Printf("could not subscribe peer to network %s: %s", network, err)
+		log.Printf("could not subscribe peer to network %s: %s", networks, err)
 		return err
 	}
 
-	log.Printf("peer subscribed on %s: %s", network, tx.Hash())
+	log.Printf("peer subscribed on %s: %s", networks, tx.Hash())
 
 	return nil
 }

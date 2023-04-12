@@ -36,7 +36,7 @@ type Struct0 struct {
 
 // LotteryMetaData contains all meta data concerning the Lottery contract.
 var LotteryMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"constructor\",\"payable\":false,\"inputs\":[]},{\"type\":\"function\",\"name\":\"_validateNetwork\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"addNetwork\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"currentLottery\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"getAllowedNetworks\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"string[]\"}]},{\"type\":\"function\",\"name\":\"getCurrentSub\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"tuple[]\",\"components\":[{\"type\":\"address\",\"name\":\"addr\"},{\"type\":\"string\",\"name\":\"network\"}]}]},{\"type\":\"function\",\"name\":\"getCurrentWinners\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"tuple[]\",\"components\":[{\"type\":\"address\",\"name\":\"addr\"},{\"type\":\"string\",\"name\":\"network\"}]}]},{\"type\":\"function\",\"name\":\"isClosed\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\",\"name\":\"dateNow\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"isOpen\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\",\"name\":\"dateNow\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"lastLottery\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"lotteries\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\"}],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"removeNetwork\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"subscribe\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"wasPicked\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"winner\",\"constant\":false,\"payable\":false,\"inputs\":[],\"outputs\":[]}]",
+	ABI: "[{\"type\":\"constructor\",\"payable\":false,\"inputs\":[]},{\"type\":\"function\",\"name\":\"_validateNetwork\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"addNetwork\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"currentLottery\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"getAllowedNetworks\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"string[]\"}]},{\"type\":\"function\",\"name\":\"getCurrentSub\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"tuple[]\",\"components\":[{\"type\":\"address\",\"name\":\"addr\"},{\"type\":\"string\",\"name\":\"network\"}]}]},{\"type\":\"function\",\"name\":\"getCurrentWinners\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"tuple[]\",\"components\":[{\"type\":\"address\",\"name\":\"addr\"},{\"type\":\"string\",\"name\":\"network\"}]}]},{\"type\":\"function\",\"name\":\"isClosed\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\",\"name\":\"dateNow\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"isOpen\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\",\"name\":\"dateNow\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"lastLottery\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"lotteries\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\"}],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"removeNetwork\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"subscribe\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string[]\",\"name\":\"networks\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"wasPicked\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"winner\",\"constant\":false,\"payable\":false,\"inputs\":[],\"outputs\":[]}]",
 }
 
 // LotteryABI is the input ABI used to generate the binding from.
@@ -594,25 +594,25 @@ func (_Lottery *LotteryTransactorSession) RemoveNetwork(network string) (*types.
 	return _Lottery.Contract.RemoveNetwork(&_Lottery.TransactOpts, network)
 }
 
-// Subscribe is a paid mutator transaction binding the contract method 0x507e7888.
+// Subscribe is a paid mutator transaction binding the contract method 0x576adb3c.
 //
-// Solidity: function subscribe(string network) returns()
-func (_Lottery *LotteryTransactor) Subscribe(opts *bind.TransactOpts, network string) (*types.Transaction, error) {
-	return _Lottery.contract.Transact(opts, "subscribe", network)
+// Solidity: function subscribe(string[] networks) returns()
+func (_Lottery *LotteryTransactor) Subscribe(opts *bind.TransactOpts, networks []string) (*types.Transaction, error) {
+	return _Lottery.contract.Transact(opts, "subscribe", networks)
 }
 
-// Subscribe is a paid mutator transaction binding the contract method 0x507e7888.
+// Subscribe is a paid mutator transaction binding the contract method 0x576adb3c.
 //
-// Solidity: function subscribe(string network) returns()
-func (_Lottery *LotterySession) Subscribe(network string) (*types.Transaction, error) {
-	return _Lottery.Contract.Subscribe(&_Lottery.TransactOpts, network)
+// Solidity: function subscribe(string[] networks) returns()
+func (_Lottery *LotterySession) Subscribe(networks []string) (*types.Transaction, error) {
+	return _Lottery.Contract.Subscribe(&_Lottery.TransactOpts, networks)
 }
 
-// Subscribe is a paid mutator transaction binding the contract method 0x507e7888.
+// Subscribe is a paid mutator transaction binding the contract method 0x576adb3c.
 //
-// Solidity: function subscribe(string network) returns()
-func (_Lottery *LotteryTransactorSession) Subscribe(network string) (*types.Transaction, error) {
-	return _Lottery.Contract.Subscribe(&_Lottery.TransactOpts, network)
+// Solidity: function subscribe(string[] networks) returns()
+func (_Lottery *LotteryTransactorSession) Subscribe(networks []string) (*types.Transaction, error) {
+	return _Lottery.Contract.Subscribe(&_Lottery.TransactOpts, networks)
 }
 
 // Winner is a paid mutator transaction binding the contract method 0xdfbf53ae.
