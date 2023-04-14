@@ -1,7 +1,7 @@
 # creating data files
 NAME=".plateaus-consensus-rollup"
 BINARY_NAME="plateaus-consensus"
-HOME_DIR="/home/yurigiovani/$NAME"
+HOME_DIR="$HOME/$NAME"
 MAIN_PACKAGE_NAME="github.com/rhizomplatform/plateaus-rollup-consensus-engine"
 
 if [ -d "$HOME_DIR" ]; then
@@ -25,9 +25,6 @@ abigen --abi=build/contracts/Lottery.abi --pkg=contract --out=pkg/plateaus/contr
 abigen --abi=build/contracts/LotteryValidation.abi --pkg=contracts --out=pkg/network/contracts/lotteryvalidation.go --type LotteryValidation
 abigen --abi=build/contracts/PlateausValidation.abi --pkg=contracts --out=pkg/network/polygon/contracts/plateausvalidation.go --type PlateausValidation
 
-echo "'$MAIN_PACKAGE_NAME/config.PathFile=$HOME_DIR/config'"
+echo "'$MAIN_PACKAGE_NAME/config.homeDir=$HOME_DIR/config'"
 
-go build -ldflags="-X '$MAIN_PACKAGE_NAME/config.PathFile=$HOME_DIR/config'" -o $BINARY_NAME ./cmd/consensus/main.go
-# example with 2 vars
-#go build -ldflags="-X 'github.com/rhizomplatform/plateaus-rollup-consensus-engine/config.PathFile=/custom/config/path_1' -X 'github.com/rhizomplatform/plateaus-rollup-consensus-engine/config.PathFile2=/custom/config/path_2'" -o myprogram ./cmd/consensus/main.go
-#sudo mv $BINARY_NAME /usr/local/bin/
+go build -ldflags="-X '$MAIN_PACKAGE_NAME/config.homeDir=$HOME_DIR/config'" -o $BINARY_NAME ./cmd/consensus/main.go
