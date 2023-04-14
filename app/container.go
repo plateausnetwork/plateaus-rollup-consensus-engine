@@ -36,9 +36,9 @@ var container Container
 // TODO: decouple this container.go in many other providers separated by context
 // TODO: move from app/container.go to app/container/container.go and networks.go too
 func init() {
+	var dataPath = config.GetAbsolutePath("data/data.json")
 	ctx := context.Background()
 	cfg := config.GetConfig()
-	dataPath := "data/data.json"
 	_, err := os.Stat(dataPath)
 
 	if err != nil {

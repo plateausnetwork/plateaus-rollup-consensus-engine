@@ -18,3 +18,6 @@ test-tool:
 
 run-consensus:
 	go run cmd/consensus/main.go
+
+install:
+	bash scripts/install.sh

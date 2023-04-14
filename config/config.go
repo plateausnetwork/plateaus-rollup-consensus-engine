@@ -1,10 +1,13 @@
 package config
 
 import (
+	"fmt"
 	"github.com/spf13/viper"
 	"log"
 )
 
+// homeDir the default value is the current PATH project
+var homeDir string = "."
 var cfg Config
 
 type Config struct {
@@ -34,9 +37,10 @@ func (n Network) GetPrivateKey() string {
 }
 
 func init() {
+	pathFile := GetAbsolutePath("config")
 	viper.SetConfigName("config")
 	viper.SetConfigType("yml")
-	viper.AddConfigPath("./config")
+	viper.AddConfigPath(pathFile)
 
 	if err := viper.ReadInConfig(); err != nil {
 		log.Panicf("some error while reading config file: %s", err)
@@ -51,4 +55,9 @@ func init() {
 
 func GetConfig() *Config {
 	return &cfg
+}
+
+// GetAbsolutePath method to return the absolute path based on homeDir variable
+func GetAbsolutePath(file string) string {
+	return fmt.Sprintf("%s/%s", homeDir, file)
 }
