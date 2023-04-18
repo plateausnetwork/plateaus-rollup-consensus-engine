@@ -21,3 +21,5 @@ else
 fi
 
 go build -ldflags="-X '$MAIN_PACKAGE_NAME/config.homeDir=$HOME_DIR'" -o $BINARY_NAME ./cmd/consensus/main.go
+
+mv $BINARY_NAME "$HOME/go/bin"
