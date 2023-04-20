@@ -35,16 +35,16 @@ func (m *MockClient) EXPECT() *MockClientMockRecorder {
 }
 
 // Put mocks base method.
-func (m *MockClient) Put(ctx context.Context, txs *map[string]string) (string, error) {
+func (m *MockClient) Put(ctx context.Context, name string, content []byte) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Put", ctx, txs)
+	ret := m.ctrl.Call(m, "Put", ctx, name, content)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Put indicates an expected call of Put.
-func (mr *MockClientMockRecorder) Put(ctx, txs interface{}) *gomock.Call {
+func (mr *MockClientMockRecorder) Put(ctx, name, content interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Put", reflect.TypeOf((*MockClient)(nil).Put), ctx, txs)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Put", reflect.TypeOf((*MockClient)(nil).Put), ctx, name, content)
 }

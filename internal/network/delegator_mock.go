@@ -9,7 +9,6 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 	hash "github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/hash"
-	nft "github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/lottery/nft"
 )
 
 // MockDelegated is a mock of Delegated interface.
@@ -50,32 +49,32 @@ func (mr *MockDelegatedMockRecorder) GetAccountBalance() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAccountBalance", reflect.TypeOf((*MockDelegated)(nil).GetAccountBalance))
 }
 
-// GetNetworkName mocks base method.
-func (m *MockDelegated) GetNetworkName() string {
+// GetNetwork mocks base method.
+func (m *MockDelegated) GetNetwork() string {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetNetworkName")
+	ret := m.ctrl.Call(m, "GetNetwork")
 	ret0, _ := ret[0].(string)
 	return ret0
 }
 
-// GetNetworkName indicates an expected call of GetNetworkName.
-func (mr *MockDelegatedMockRecorder) GetNetworkName() *gomock.Call {
+// GetNetwork indicates an expected call of GetNetwork.
+func (mr *MockDelegatedMockRecorder) GetNetwork() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetNetworkName", reflect.TypeOf((*MockDelegated)(nil).GetNetworkName))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetNetwork", reflect.TypeOf((*MockDelegated)(nil).GetNetwork))
 }
 
 // MintNFT mocks base method.
-func (m *MockDelegated) MintNFT(hash hash.Hash, lotteryValidation *nft.LotteryValidation, url string, minHeight, maxHeight int) error {
+func (m *MockDelegated) MintNFT(hash hash.Hash, imgURL, url string, minHeight, maxHeight int) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "MintNFT", hash, lotteryValidation, url, minHeight, maxHeight)
+	ret := m.ctrl.Call(m, "MintNFT", hash, imgURL, url, minHeight, maxHeight)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // MintNFT indicates an expected call of MintNFT.
-func (mr *MockDelegatedMockRecorder) MintNFT(hash, lotteryValidation, url, minHeight, maxHeight interface{}) *gomock.Call {
+func (mr *MockDelegatedMockRecorder) MintNFT(hash, imgURL, url, minHeight, maxHeight interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MintNFT", reflect.TypeOf((*MockDelegated)(nil).MintNFT), hash, lotteryValidation, url, minHeight, maxHeight)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MintNFT", reflect.TypeOf((*MockDelegated)(nil).MintNFT), hash, imgURL, url, minHeight, maxHeight)
 }
 
 // Supports mocks base method.

@@ -35,9 +35,9 @@ func (m *MockRegister) EXPECT() *MockRegisterMockRecorder {
 }
 
 // GenerateRoot mocks base method.
-func (m *MockRegister) GenerateRoot(latestBlocks *SubscribeBlocks, network string) (hash.Hash, *map[string]string, error) {
+func (m *MockRegister) GenerateRoot(latestBlocks *SubscribeBlocks) (hash.Hash, *map[string]string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GenerateRoot", latestBlocks, network)
+	ret := m.ctrl.Call(m, "GenerateRoot", latestBlocks)
 	ret0, _ := ret[0].(hash.Hash)
 	ret1, _ := ret[1].(*map[string]string)
 	ret2, _ := ret[2].(error)
@@ -45,9 +45,9 @@ func (m *MockRegister) GenerateRoot(latestBlocks *SubscribeBlocks, network strin
 }
 
 // GenerateRoot indicates an expected call of GenerateRoot.
-func (mr *MockRegisterMockRecorder) GenerateRoot(latestBlocks, network interface{}) *gomock.Call {
+func (mr *MockRegisterMockRecorder) GenerateRoot(latestBlocks interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateRoot", reflect.TypeOf((*MockRegister)(nil).GenerateRoot), latestBlocks, network)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateRoot", reflect.TypeOf((*MockRegister)(nil).GenerateRoot), latestBlocks)
 }
 
 // GetLotteryWinners mocks base method.

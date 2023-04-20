@@ -61,6 +61,8 @@ func (c Client) GetLotteryWinners() (string, error) {
 		winners[sub.Addr.String()] = sub.Network
 	}
 
+	log.Printf("winners: %v", r)
+
 	winner, _ := winners[c.fromAddress.String()]
 
 	return winner, nil

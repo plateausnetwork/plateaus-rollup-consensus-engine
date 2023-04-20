@@ -5,6 +5,7 @@ package lottery
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/config"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/database"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/ipfs"
@@ -76,6 +77,10 @@ func (m Manager) RegisterTx(peer string, networks []string) error {
 	}
 
 	networkWinner, err := m.r.GetLotteryWinners(peer)
+
+	if len(networkWinner) <= 0 {
+		return errors.New(fmt.Sprintf("peer %s not picked as winner", peer))
+	}
 
 	log.Printf("network winner %s", networkWinner)
 

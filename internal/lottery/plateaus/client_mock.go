@@ -147,7 +147,7 @@ func (mr *MockRPCClientMockRecorder) PickWinner() *gomock.Call {
 }
 
 // Subscribe mocks base method.
-func (m *MockRPCClient) Subscribe(network string) error {
+func (m *MockRPCClient) Subscribe(network []string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Subscribe", network)
 	ret0, _ := ret[0].(error)
