@@ -1,5 +1,5 @@
-build-contract:
-	"$(CURDIR)/scripts/install.sh"
+build-contracts:
+	"$(CURDIR)/scripts/build-contracts.sh"
 
 build-mocks:
 	make clean

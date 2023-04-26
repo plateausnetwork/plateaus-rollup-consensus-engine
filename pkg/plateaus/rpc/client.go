@@ -55,17 +55,9 @@ func (c Client) GetLotteryWinners() (string, error) {
 		return "", err
 	}
 
-	var winners = make(map[string]string)
-
-	for _, sub := range r {
-		winners[sub.Addr.String()] = sub.Network
-	}
-
 	log.Printf("winners: %v", r)
 
-	winner, _ := winners[c.fromAddress.String()]
-
-	return winner, nil
+	return r, nil
 }
 
 func (c Client) IsClosed(date time.Time) (bool, error) {
