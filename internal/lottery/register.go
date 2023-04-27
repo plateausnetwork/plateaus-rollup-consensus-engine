@@ -4,7 +4,6 @@ package lottery
 
 import (
 	"encoding/json"
-	"errors"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/hash"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/lottery/plateaus"
 	"log"
@@ -135,7 +134,8 @@ func (r RegisterService) PickWinner() error {
 	}
 
 	if ok == true {
-		return errors.New("winner was picked")
+		log.Printf("winner was picked")
+		return nil
 	}
 
 	return r.rpc.PickWinner()

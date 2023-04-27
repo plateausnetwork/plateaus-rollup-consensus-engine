@@ -14,10 +14,10 @@ type Client struct {
 	url string
 }
 
-func NewClient(c http.ClientDoer) *Client {
+func NewClient(c http.ClientDoer, plateausRPC string) *Client {
 	return &Client{
 		ClientDoer: c,
-		url:        "http://sentry-nodes.rhizom.me:1317",
+		url:        plateausRPC,
 	}
 }
 
