@@ -14,7 +14,7 @@ import (
 type LotteryValidation interface {
 	Mint(hash string, img string, url string, minHeight, maxHeight int64) error
 	AccountBalance() (int64, error)
-	BalanceOf() (int64, error)
+	TotalBalance() (int64, error)
 	TokenURI(tokenID int64) (string, error)
 }
 
@@ -69,8 +69,8 @@ func (c LotteryValidationClient) AccountBalance() (int64, error) {
 	return balance.Int64(), nil
 }
 
-func (c LotteryValidationClient) BalanceOf() (int64, error) {
-	balance, err := c.contract.BalanceOf(nil, c.fromAddress)
+func (c LotteryValidationClient) TotalBalance() (int64, error) {
+	balance, err := c.contract.TokenIds(nil)
 
 	if err != nil {
 		log.Printf("could not get balance of: %s", err)

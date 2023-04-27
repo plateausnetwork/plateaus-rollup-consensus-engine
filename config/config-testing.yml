@@ -19,4 +19,5 @@ networks:
 peer: "{some peer id}"
 plateaus_private_key: "{some private key}"
 plateaus_rpc: "https://plateaus-testnet.rhizom.me"
+plateaus_rest: "http://sentry-nodes.rhizom.me:1317"
 ipfs_token: "{some token}"

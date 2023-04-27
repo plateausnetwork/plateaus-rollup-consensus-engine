@@ -40,7 +40,7 @@ func (s LotteryValidationService) MintNFT(hash hash.Hash, imgURL, url string, mi
 }
 
 func (s LotteryValidationService) WasMinted(hash hash.Hash) (bool, error) {
-	bal, err := s.rpc.BalanceOf()
+	bal, err := s.rpc.TotalBalance()
 
 	if bal == 0 {
 		return false, nil
