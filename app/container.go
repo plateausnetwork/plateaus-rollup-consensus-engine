@@ -50,7 +50,7 @@ func init() {
 
 	c := &httpDefault.Client{}
 	c.Timeout = 10 * time.Second
-	container.PlateausHTTPClient = http.NewClient(c, cfg.PlateausRPC)
+	container.PlateausHTTPClient = http.NewClient(c, cfg.PlateausRest)
 
 	clientPlateaus, err := ethereum.Dial(cfg.PlateausRPC)
 

@@ -16,6 +16,7 @@ type Config struct {
 	Peer                                 string    `mapstructure:"peer"`
 	PlateausPrivateKey                   string    `mapstructure:"plateaus_private_key"`
 	PlateausRPC                          string    `mapstructure:"plateaus_rpc"`
+	PlateausRest                         string    `mapstructure:"plateaus_rest"`
 	PlateausNodeValidatorContractAddress string    `mapstructure:"plateaus_node_validator_contract_address"`
 	IPFSToken                            string    `mapstructure:"ipfs_token"`
 }
