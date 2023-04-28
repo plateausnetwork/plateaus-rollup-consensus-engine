@@ -7,7 +7,6 @@ import (
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/pkg/plateaus/contract"
 	"log"
 	"math/big"
-	"time"
 )
 
 type Client struct {
@@ -60,12 +59,10 @@ func (c Client) GetLotteryWinners() (string, error) {
 	return r, nil
 }
 
-func (c Client) IsClosed(date time.Time) (bool, error) {
-	bigDate := big.NewInt(date.Unix())
-
+func (c Client) IsClosed() (bool, error) {
 	r, err := c.contract.IsClosed(&bind.CallOpts{
 		From: c.fromAddress,
-	}, bigDate)
+	})
 
 	if err != nil || r == false {
 		log.Println("current lottery is not closed")
@@ -75,12 +72,10 @@ func (c Client) IsClosed(date time.Time) (bool, error) {
 	return r, err
 }
 
-func (c Client) IsOpen(date time.Time) (bool, error) {
-	bigDate := big.NewInt(date.Unix())
-
+func (c Client) IsOpen() (bool, error) {
 	r, err := c.contract.IsOpen(&bind.CallOpts{
 		From: c.fromAddress,
-	}, bigDate)
+	})
 
 	if err != nil || r == false {
 		log.Println("current lottery is not open")

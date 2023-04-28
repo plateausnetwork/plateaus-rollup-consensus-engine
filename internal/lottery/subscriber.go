@@ -10,7 +10,6 @@ import (
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/hash"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/lottery/plateaus"
 	"log"
-	"time"
 )
 
 type Subscriber interface {
@@ -126,5 +125,5 @@ func (s SubscribeService) checkBlock(latestBlock *LatestBlock) (bool, error) {
 }
 
 func (s SubscribeService) isOpen() (bool, error) {
-	return s.rpc.IsOpen(time.Now())
+	return s.rpc.IsOpen()
 }

@@ -34,9 +34,18 @@ type Struct0 struct {
 	Network string
 }
 
+// Struct1 is an auto generated low-level Go binding around an user-defined struct.
+type Struct1 struct {
+	Id            *big.Int
+	Subscriptions []Struct0
+	Winners       []Struct0
+	StartDate     *big.Int
+	FinishDate    *big.Int
+}
+
 // LotteryMetaData contains all meta data concerning the Lottery contract.
 var LotteryMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"constructor\",\"payable\":false,\"inputs\":[]},{\"type\":\"function\",\"name\":\"_validateNetwork\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"addNetwork\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"currentLottery\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"getAllowedNetworks\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"string[]\"}]},{\"type\":\"function\",\"name\":\"getCurrentSub\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"tuple[]\",\"components\":[{\"type\":\"address\",\"name\":\"addr\"},{\"type\":\"string\",\"name\":\"network\"}]}]},{\"type\":\"function\",\"name\":\"getCurrentWinners\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"string\"}]},{\"type\":\"function\",\"name\":\"isClosed\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\",\"name\":\"dateNow\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"isOpen\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\",\"name\":\"dateNow\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"lastLottery\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"lotteries\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\"}],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"removeNetwork\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"subscribe\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string[]\",\"name\":\"networks\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"wasPicked\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"winner\",\"constant\":false,\"payable\":false,\"inputs\":[],\"outputs\":[]}]",
+	ABI: "[{\"type\":\"constructor\",\"payable\":false,\"inputs\":[]},{\"type\":\"function\",\"name\":\"_validateNetwork\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"addNetwork\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"currentLottery\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"getAllowedNetworks\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"string[]\"}]},{\"type\":\"function\",\"name\":\"getCurrentSub\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"tuple[]\",\"components\":[{\"type\":\"address\",\"name\":\"addr\"},{\"type\":\"string\",\"name\":\"network\"}]}]},{\"type\":\"function\",\"name\":\"getCurrentWinners\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"string\"}]},{\"type\":\"function\",\"name\":\"getLotteries\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"tuple[]\",\"components\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"tuple[]\",\"name\":\"subscriptions\",\"components\":[{\"type\":\"address\",\"name\":\"addr\"},{\"type\":\"string\",\"name\":\"network\"}]},{\"type\":\"tuple[]\",\"name\":\"winners\",\"components\":[{\"type\":\"address\",\"name\":\"addr\"},{\"type\":\"string\",\"name\":\"network\"}]},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]}]},{\"type\":\"function\",\"name\":\"isClosed\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"isOpen\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"lastLottery\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"lotteries\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[{\"type\":\"uint256\"}],\"outputs\":[{\"type\":\"uint256\",\"name\":\"id\"},{\"type\":\"uint256\",\"name\":\"start_date\"},{\"type\":\"uint256\",\"name\":\"finish_date\"}]},{\"type\":\"function\",\"name\":\"removeNetwork\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string\",\"name\":\"network\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"subscribe\",\"constant\":false,\"payable\":false,\"inputs\":[{\"type\":\"string[]\",\"name\":\"networks\"}],\"outputs\":[]},{\"type\":\"function\",\"name\":\"wasPicked\",\"constant\":true,\"stateMutability\":\"view\",\"payable\":false,\"inputs\":[],\"outputs\":[{\"type\":\"bool\"}]},{\"type\":\"function\",\"name\":\"winner\",\"constant\":false,\"payable\":false,\"inputs\":[],\"outputs\":[]}]",
 }
 
 // LotteryABI is the input ABI used to generate the binding from.
@@ -359,12 +368,43 @@ func (_Lottery *LotteryCallerSession) GetCurrentWinners() (string, error) {
 	return _Lottery.Contract.GetCurrentWinners(&_Lottery.CallOpts)
 }
 
-// IsClosed is a free data retrieval call binding the contract method 0xd5c78a28.
+// GetLotteries is a free data retrieval call binding the contract method 0xbcc82ec4.
 //
-// Solidity: function isClosed(uint256 dateNow) view returns(bool)
-func (_Lottery *LotteryCaller) IsClosed(opts *bind.CallOpts, dateNow *big.Int) (bool, error) {
+// Solidity: function getLotteries() view returns((uint256,(address,string)[],(address,string)[],uint256,uint256)[])
+func (_Lottery *LotteryCaller) GetLotteries(opts *bind.CallOpts) ([]Struct1, error) {
 	var out []interface{}
-	err := _Lottery.contract.Call(opts, &out, "isClosed", dateNow)
+	err := _Lottery.contract.Call(opts, &out, "getLotteries")
+
+	if err != nil {
+		return *new([]Struct1), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new([]Struct1)).(*[]Struct1)
+
+	return out0, err
+
+}
+
+// GetLotteries is a free data retrieval call binding the contract method 0xbcc82ec4.
+//
+// Solidity: function getLotteries() view returns((uint256,(address,string)[],(address,string)[],uint256,uint256)[])
+func (_Lottery *LotterySession) GetLotteries() ([]Struct1, error) {
+	return _Lottery.Contract.GetLotteries(&_Lottery.CallOpts)
+}
+
+// GetLotteries is a free data retrieval call binding the contract method 0xbcc82ec4.
+//
+// Solidity: function getLotteries() view returns((uint256,(address,string)[],(address,string)[],uint256,uint256)[])
+func (_Lottery *LotteryCallerSession) GetLotteries() ([]Struct1, error) {
+	return _Lottery.Contract.GetLotteries(&_Lottery.CallOpts)
+}
+
+// IsClosed is a free data retrieval call binding the contract method 0xc2b6b58c.
+//
+// Solidity: function isClosed() view returns(bool)
+func (_Lottery *LotteryCaller) IsClosed(opts *bind.CallOpts) (bool, error) {
+	var out []interface{}
+	err := _Lottery.contract.Call(opts, &out, "isClosed")
 
 	if err != nil {
 		return *new(bool), err
@@ -376,26 +416,26 @@ func (_Lottery *LotteryCaller) IsClosed(opts *bind.CallOpts, dateNow *big.Int) (
 
 }
 
-// IsClosed is a free data retrieval call binding the contract method 0xd5c78a28.
+// IsClosed is a free data retrieval call binding the contract method 0xc2b6b58c.
 //
-// Solidity: function isClosed(uint256 dateNow) view returns(bool)
-func (_Lottery *LotterySession) IsClosed(dateNow *big.Int) (bool, error) {
-	return _Lottery.Contract.IsClosed(&_Lottery.CallOpts, dateNow)
+// Solidity: function isClosed() view returns(bool)
+func (_Lottery *LotterySession) IsClosed() (bool, error) {
+	return _Lottery.Contract.IsClosed(&_Lottery.CallOpts)
 }
 
-// IsClosed is a free data retrieval call binding the contract method 0xd5c78a28.
+// IsClosed is a free data retrieval call binding the contract method 0xc2b6b58c.
 //
-// Solidity: function isClosed(uint256 dateNow) view returns(bool)
-func (_Lottery *LotteryCallerSession) IsClosed(dateNow *big.Int) (bool, error) {
-	return _Lottery.Contract.IsClosed(&_Lottery.CallOpts, dateNow)
+// Solidity: function isClosed() view returns(bool)
+func (_Lottery *LotteryCallerSession) IsClosed() (bool, error) {
+	return _Lottery.Contract.IsClosed(&_Lottery.CallOpts)
 }
 
-// IsOpen is a free data retrieval call binding the contract method 0x4d6861a6.
+// IsOpen is a free data retrieval call binding the contract method 0x47535d7b.
 //
-// Solidity: function isOpen(uint256 dateNow) view returns(bool)
-func (_Lottery *LotteryCaller) IsOpen(opts *bind.CallOpts, dateNow *big.Int) (bool, error) {
+// Solidity: function isOpen() view returns(bool)
+func (_Lottery *LotteryCaller) IsOpen(opts *bind.CallOpts) (bool, error) {
 	var out []interface{}
-	err := _Lottery.contract.Call(opts, &out, "isOpen", dateNow)
+	err := _Lottery.contract.Call(opts, &out, "isOpen")
 
 	if err != nil {
 		return *new(bool), err
@@ -407,18 +447,18 @@ func (_Lottery *LotteryCaller) IsOpen(opts *bind.CallOpts, dateNow *big.Int) (bo
 
 }
 
-// IsOpen is a free data retrieval call binding the contract method 0x4d6861a6.
+// IsOpen is a free data retrieval call binding the contract method 0x47535d7b.
 //
-// Solidity: function isOpen(uint256 dateNow) view returns(bool)
-func (_Lottery *LotterySession) IsOpen(dateNow *big.Int) (bool, error) {
-	return _Lottery.Contract.IsOpen(&_Lottery.CallOpts, dateNow)
+// Solidity: function isOpen() view returns(bool)
+func (_Lottery *LotterySession) IsOpen() (bool, error) {
+	return _Lottery.Contract.IsOpen(&_Lottery.CallOpts)
 }
 
-// IsOpen is a free data retrieval call binding the contract method 0x4d6861a6.
+// IsOpen is a free data retrieval call binding the contract method 0x47535d7b.
 //
-// Solidity: function isOpen(uint256 dateNow) view returns(bool)
-func (_Lottery *LotteryCallerSession) IsOpen(dateNow *big.Int) (bool, error) {
-	return _Lottery.Contract.IsOpen(&_Lottery.CallOpts, dateNow)
+// Solidity: function isOpen() view returns(bool)
+func (_Lottery *LotteryCallerSession) IsOpen() (bool, error) {
+	return _Lottery.Contract.IsOpen(&_Lottery.CallOpts)
 }
 
 // LastLottery is a free data retrieval call binding the contract method 0xaf0b4b27.

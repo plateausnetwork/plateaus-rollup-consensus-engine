@@ -8,7 +8,6 @@ import (
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/lottery/plateaus"
 	"log"
 	"sort"
-	"time"
 )
 
 type Register interface {
@@ -117,7 +116,7 @@ func sortTxs(mtxs *map[int]Txs) *Txs {
 }
 
 func (r RegisterService) IsClosed() (bool, error) {
-	return r.rpc.IsClosed(time.Now())
+	return r.rpc.IsClosed()
 }
 
 func (r RegisterService) GetLotteryWinners(peer string) (string, error) {
