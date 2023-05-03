@@ -1,21 +1,21 @@
-plateaus_lottery_contract_address: "{some contract address}"
-plateaus_node_validator_contract_address: "{some contract address}"
+plateaus_lottery_contract_address: "0x07f2714eBC0cC2b0e5910887fB6a31ce93457469"
+plateaus_node_validator_contract_address: "0x0A6c313f21e7964F4cE85dF552C0e34c0A0C6AED"
 networks:
   - name: "polygon"
     min_amount: 0.1
     private_key: "{some private key}"
-    lottery_validation_contract_address: "{some contract address}"
-    rpc: "{some rpc}"
-  - name: "zksync"
-    min_amount: 0.001
-    private_key: "{some private key}"
-    lottery_validation_contract_address: "{some contract address}"
-    rpc: "{some rpc}"
+    lottery_validation_contract_address: "0x524208ed9f98037DcE78f3eeec250E886455038C"
+    rpc: "https://rpc.ankr.com/polygon_mumbai"
+#  - name: "zksync"
+#    min_amount: 0.001
+#    private_key: "{some private key}"
+#    lottery_validation_contract_address: "{some contract address}"
+#    rpc: "{some rpc}"
   - name: "scroll"
     min_amount: 0.001
     private_key: "{some private key}"
-    lottery_validation_contract_address: "{some contract address}"
-    rpc: "{some rpc}"
+    lottery_validation_contract_address: "0xB307E7318305aFb05b991518cc898312db1f9c68"
+    rpc: "https://alpha-rpc.scroll.io/l2"
 peer: "{some peer id}"
 plateaus_private_key: "{some private key}"
 plateaus_rpc: "https://plateaus-testnet.rhizom.me"
