@@ -9,7 +9,7 @@ networks:
 #  - name: "zksync"
 #    min_amount: 0.001
 #    private_key: ""
-#    lottery_validation_contract_address: "{some contract address}"
+#    lottery_validation_contract_address: ""
 #    rpc: ""
   - name: "scroll"
     min_amount: 0.001

@@ -10,7 +10,6 @@ import (
 )
 
 func TestRegister_Register(t *testing.T) {
-	network := "network"
 	subscribedBlocks := &SubscribeBlocks{
 		block:      1055,
 		subscribed: 900,
@@ -32,7 +31,7 @@ func TestRegister_Register(t *testing.T) {
 	mockClientRPC := plateaus.NewMockRPCClient(ctrl)
 	mockHashGenerator := hash.NewMockGenerator(ctrl)
 
-	mockClientHTTP.EXPECT().GetTransactions(gomock.Eq(1000), gomock.Eq(1999), gomock.Eq(0), gomock.Eq(10)).Times(1).Return(txsBytes, nil)
+	mockClientHTTP.EXPECT().GetTransactions(gomock.Eq(0), gomock.Eq(999), gomock.Eq(0), gomock.Eq(1000)).Times(1).Return(txsBytes, nil)
 	mockHashGenerator.EXPECT().GenerateByCollection(gomock.Eq(txsArrString)).Times(1).Return(hash.Hash{}, nil)
 	mockHashGenerator.EXPECT().GenerateByMap(gomock.Eq(txsMapString)).Times(1).Return(txsMapString, nil)
 
@@ -42,7 +41,7 @@ func TestRegister_Register(t *testing.T) {
 		hg:   mockHashGenerator,
 	}
 
-	res, txs, err := m.GenerateRoot(subscribedBlocks, network)
+	res, txs, err := m.GenerateRoot(subscribedBlocks)
 
 	assert.IsType(t, hash.Hash{}, res)
 	assert.IsType(t, &map[string]string{}, txs)
@@ -51,7 +50,6 @@ func TestRegister_Register(t *testing.T) {
 }
 
 func TestRegister_Register_GetTransactions_11_Times(t *testing.T) {
-	network := "network"
 	subscribedBlocks := &SubscribeBlocks{
 		block:      1055,
 		subscribed: 900,
@@ -66,7 +64,7 @@ func TestRegister_Register_GetTransactions_11_Times(t *testing.T) {
 		}],
 		"pagination": {
 			"next_key": null,
-			"total": "100"
+			"total": "11000"
 		}
 	}`)
 	txsArrString := &[]string{
@@ -82,7 +80,7 @@ func TestRegister_Register_GetTransactions_11_Times(t *testing.T) {
 	mockClientRPC := plateaus.NewMockRPCClient(ctrl)
 	mockHashGenerator := hash.NewMockGenerator(ctrl)
 
-	mockClientHTTP.EXPECT().GetTransactions(gomock.Eq(1000), gomock.Eq(1999), gomock.Any(), gomock.Eq(10)).Times(11).Return(txsBytes, nil)
+	mockClientHTTP.EXPECT().GetTransactions(gomock.Eq(0), gomock.Eq(999), gomock.Any(), gomock.Eq(1000)).Times(11).Return(txsBytes, nil)
 	mockHashGenerator.EXPECT().GenerateByCollection(gomock.Eq(txsArrString)).Times(1).Return(hash.Hash{}, nil)
 	mockHashGenerator.EXPECT().GenerateByMap(gomock.Eq(txsMapString)).Times(1).Return(txsMapString, nil)
 
@@ -92,7 +90,7 @@ func TestRegister_Register_GetTransactions_11_Times(t *testing.T) {
 		hg:   mockHashGenerator,
 	}
 
-	res, tx, err := m.GenerateRoot(subscribedBlocks, network)
+	res, tx, err := m.GenerateRoot(subscribedBlocks)
 
 	assert.IsType(t, hash.Hash{}, res)
 	assert.IsType(t, &map[string]string{}, tx)
@@ -168,6 +166,23 @@ func TestRegister_PickWinner_WinnerWasPicked(t *testing.T) {
 
 	err := m.PickWinner()
 
+	assert.NoError(t, err)
+}
+
+func TestRegister_PickWinner_WinnerWasPicked_Error(t *testing.T) {
+	ctrl := gomock.NewController(t)
+
+	mockClientRPC := plateaus.NewMockRPCClient(ctrl)
+	mockClientRPC.EXPECT().WasPicked().Times(1).Return(false, errors.New("some error"))
+	mockClientRPC.EXPECT().PickWinner().Times(0)
+
+	m := RegisterService{
+		http: nil,
+		rpc:  mockClientRPC,
+		hg:   nil,
+	}
+
+	err := m.PickWinner()
+
 	assert.Error(t, err)
-	assert.ErrorContains(t, err, "winner was picked")
 }

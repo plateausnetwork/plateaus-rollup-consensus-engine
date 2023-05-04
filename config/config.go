@@ -47,6 +47,7 @@ func init() {
 	pathFile := GetAbsolutePath("config")
 	viper.SetConfigName("config")
 	viper.SetConfigType("yml")
+	viper.AddConfigPath("../../config")
 	viper.AddConfigPath(pathFile)
 
 	if err := viper.ReadInConfig(); err != nil {

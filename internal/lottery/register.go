@@ -14,7 +14,7 @@ type Register interface {
 	GetLotteryWinners(peer string) (string, error)
 	IsClosed() (bool, error)
 	PickWinner() error
-	GenerateRoot(latestBlocks *SubscribeBlocks) (hash.Hash, *map[string]string, error)
+	GenerateRoot(subscribeBlocks *SubscribeBlocks) (hash.Hash, *map[string]string, error)
 }
 
 type RegisterService struct {

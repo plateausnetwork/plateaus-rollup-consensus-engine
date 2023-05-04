@@ -115,6 +115,7 @@ func (m Manager) RegisterTx(peer string, networks []string) error {
 
 	log.Printf("nft can be minted: %s", r)
 
+	// TODO: these piece of the code can be executed in parallel (UploadConsensusData, GenerateImageLotteryValidation, UploadImage)
 	txsURL, err := m.ipfs.UploadConsensusData(context.TODO(), txsMapped)
 
 	if err != nil {

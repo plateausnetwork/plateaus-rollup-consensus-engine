@@ -6,7 +6,6 @@ package plateaus
 
 import (
 	reflect "reflect"
-	time "time"
 
 	gomock "github.com/golang/mock/gomock"
 )
@@ -103,33 +102,33 @@ func (mr *MockRPCClientMockRecorder) GetLotteryWinners() *gomock.Call {
 }
 
 // IsClosed mocks base method.
-func (m *MockRPCClient) IsClosed(date time.Time) (bool, error) {
+func (m *MockRPCClient) IsClosed() (bool, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "IsClosed", date)
+	ret := m.ctrl.Call(m, "IsClosed")
 	ret0, _ := ret[0].(bool)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // IsClosed indicates an expected call of IsClosed.
-func (mr *MockRPCClientMockRecorder) IsClosed(date interface{}) *gomock.Call {
+func (mr *MockRPCClientMockRecorder) IsClosed() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsClosed", reflect.TypeOf((*MockRPCClient)(nil).IsClosed), date)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsClosed", reflect.TypeOf((*MockRPCClient)(nil).IsClosed))
 }
 
 // IsOpen mocks base method.
-func (m *MockRPCClient) IsOpen(date time.Time) (bool, error) {
+func (m *MockRPCClient) IsOpen() (bool, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "IsOpen", date)
+	ret := m.ctrl.Call(m, "IsOpen")
 	ret0, _ := ret[0].(bool)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // IsOpen indicates an expected call of IsOpen.
-func (mr *MockRPCClientMockRecorder) IsOpen(date interface{}) *gomock.Call {
+func (mr *MockRPCClientMockRecorder) IsOpen() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsOpen", reflect.TypeOf((*MockRPCClient)(nil).IsOpen), date)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsOpen", reflect.TypeOf((*MockRPCClient)(nil).IsOpen))
 }
 
 // PickWinner mocks base method.

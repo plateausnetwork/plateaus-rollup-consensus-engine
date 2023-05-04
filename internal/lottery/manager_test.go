@@ -2,6 +2,7 @@ package lottery
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"github.com/golang/mock/gomock"
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/database"
@@ -145,11 +146,12 @@ func TestManager_RegisterTx(t *testing.T) {
 	peer := "peer"
 	networks := []string{"net_1", "net_2"}
 	root := hash.Hash{}
-	txsMapped := &map[string]string{}
+	txsMapped := map[string]string{"tx_1": "tx_1_content"}
+	txsBytes, _ := json.Marshal(txsMapped)
 	ipfsURL := "ipfs://ipfs.io/test"
 	latestBlock := &LatestBlock{}
 	data := &database.Data{}
-	nftValidation := &nft.LotteryValidation{}
+	nftValidation := nft.NewLotteryValidation([]byte("new avatar"))
 
 	ctrl := gomock.NewController(t)
 
@@ -165,11 +167,14 @@ func TestManager_RegisterTx(t *testing.T) {
 	mockRegister.EXPECT().IsClosed().Times(1).Return(true, nil)
 	mockRegister.EXPECT().GetLotteryWinners(gomock.Eq(peer)).Times(1).Return(networks[0], nil)
 	mockRegister.EXPECT().PickWinner().Times(1)
-	mockRegister.EXPECT().GenerateRoot(gomock.AssignableToTypeOf(&SubscribeBlocks{}), gomock.Eq(networks[0])).Times(1).Return(root, txsMapped, nil)
+	mockRegister.EXPECT().GenerateRoot(gomock.AssignableToTypeOf(&SubscribeBlocks{})).Times(1).Return(root, &txsMapped, nil)
 
-	mockDelegatedNet1.EXPECT().Supports(gomock.Eq(networks[0])).Times(1).Return(false)
+	mockDelegatedNet1.EXPECT().WasMinted(gomock.Nil()).Times(0)
+	mockDelegatedNet1.EXPECT().Supports(gomock.Eq(networks[0])).Times(2).Return(false)
+	mockDelegatedNet1.EXPECT().GetNetwork().Times(1).Return(networks[0])
 	mockDelegatedNet1.EXPECT().MintNFT(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Times(0)
-	mockDelegatedNet2.EXPECT().Supports(gomock.Eq(networks[0])).Times(1).Return(true)
+	mockDelegatedNet2.EXPECT().WasMinted(gomock.Eq(root)).Times(1).Return(false, nil)
+	mockDelegatedNet2.EXPECT().Supports(gomock.Eq(networks[0])).Times(2).Return(true)
 	mockDelegatedNet2.EXPECT().MintNFT(gomock.Eq(root), gomock.Any(), gomock.Eq(ipfsURL), gomock.Any(), gomock.Any()).Times(1).Return(nil)
 
 	mockImageGenerator.EXPECT().Generate(gomock.Eq(root.String())).Times(1).Return(nftValidation, nil)
@@ -179,7 +184,8 @@ func TestManager_RegisterTx(t *testing.T) {
 	mockDataRepository.EXPECT().Get().Times(1).Return(data, nil)
 
 	mockClientIPFS := ipfs.NewMockClient(ctrl)
-	mockClientIPFS.EXPECT().Put(gomock.Eq(context.TODO()), gomock.Eq(txsMapped)).Times(1).Return(ipfsURL, nil)
+	mockClientIPFS.EXPECT().Put(gomock.Eq(context.TODO()), gomock.Eq(ipfs.ConsensusFile), gomock.Eq(txsBytes)).Times(1).Return(ipfsURL, nil)
+	mockClientIPFS.EXPECT().Put(gomock.Eq(context.TODO()), gomock.Eq(ipfs.ImgFile), gomock.Eq(nftValidation.Image)).Times(1).Return(ipfsURL, nil)
 	serviceIPFS := ipfs.NewService(mockClientIPFS)
 
 	m := Manager{
@@ -210,7 +216,7 @@ func TestManager_RegisterTx_LotteryNotClosed(t *testing.T) {
 
 	mockRegister.EXPECT().IsClosed().Times(1).Return(false, nil)
 	mockRegister.EXPECT().GetLotteryWinners(gomock.Eq(peer)).Times(0)
-	mockRegister.EXPECT().GenerateRoot(gomock.Eq(latestBlock), gomock.Eq(networks[0])).Times(0)
+	mockRegister.EXPECT().GenerateRoot(gomock.Eq(latestBlock)).Times(0)
 
 	mockDelegatedNet1.EXPECT().Supports(gomock.Eq(networks[0])).Times(0)
 	mockDelegatedNet1.EXPECT().MintNFT(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Times(0)
@@ -244,7 +250,7 @@ func TestManager_RegisterTx_GetLotteryWinnersError(t *testing.T) {
 
 	mockRegister.EXPECT().IsClosed().Times(1).Return(true, nil)
 	mockRegister.EXPECT().GetLotteryWinners(gomock.Eq(peer)).Times(1).Return("", errors.New("some error"))
-	mockRegister.EXPECT().GenerateRoot(gomock.Any(), gomock.Eq(networks[0])).Times(0)
+	mockRegister.EXPECT().GenerateRoot(gomock.Any()).Times(0)
 	mockRegister.EXPECT().PickWinner().Times(1).Return(nil)
 
 	mockDelegatedNet1.EXPECT().Supports(gomock.Eq(networks[0])).Times(0)
@@ -284,7 +290,7 @@ func TestManager_RegisterTx_RegisterError(t *testing.T) {
 
 	mockRegister.EXPECT().IsClosed().Times(1).Return(true, nil)
 	mockRegister.EXPECT().GetLotteryWinners(gomock.Eq(peer)).Times(1).Return(networks[0], nil)
-	mockRegister.EXPECT().GenerateRoot(gomock.Any(), gomock.Eq(networks[0])).Times(1).Return(nil, nil, errors.New("some error"))
+	mockRegister.EXPECT().GenerateRoot(gomock.Any()).Times(1).Return(nil, nil, errors.New("some error"))
 	mockRegister.EXPECT().PickWinner().Times(1).Return(nil)
 
 	mockDelegatedNet1.EXPECT().Supports(gomock.Eq(networks[0])).Times(0)
@@ -312,11 +318,12 @@ func TestManager_RegisterTx_MintNFTError(t *testing.T) {
 	peer := "peer"
 	networks := []string{"net_1", "net_2"}
 	root := hash.Hash{}
-	txsMapped := &map[string]string{}
+	txsMapped := &map[string]string{"tx_1": "tx_1_content"}
+	txBytes, _ := json.Marshal(txsMapped)
 	ipfsURL := "ipfs://ipfs.io/test"
 	latestBlock := &LatestBlock{}
 	data := &database.Data{}
-	nftValidation := &nft.LotteryValidation{}
+	nftValidation := nft.NewLotteryValidation([]byte("new avatar"))
 
 	ctrl := gomock.NewController(t)
 
@@ -331,12 +338,14 @@ func TestManager_RegisterTx_MintNFTError(t *testing.T) {
 
 	mockRegister.EXPECT().IsClosed().Times(1).Return(true, nil)
 	mockRegister.EXPECT().GetLotteryWinners(gomock.Eq(peer)).Times(1).Return(networks[0], nil)
-	mockRegister.EXPECT().GenerateRoot(gomock.Any(), gomock.Eq(networks[0])).Times(1).Return(root, txsMapped, nil)
+	mockRegister.EXPECT().GenerateRoot(gomock.Any()).Times(1).Return(root, txsMapped, nil)
 	mockRegister.EXPECT().PickWinner().Times(1).Return(nil)
 
-	mockDelegatedNet1.EXPECT().Supports(gomock.Eq(networks[0])).Times(1).Return(true)
+	mockDelegatedNet1.EXPECT().Supports(gomock.Eq(networks[0])).Times(2).Return(true)
+	mockDelegatedNet1.EXPECT().WasMinted(gomock.Eq(root)).Times(1).Return(false, nil)
 	mockDelegatedNet1.EXPECT().MintNFT(gomock.Any(), gomock.Any(), gomock.Eq(ipfsURL), gomock.Any(), gomock.Any()).Times(1).Return(errors.New("some error"))
 	mockDelegatedNet2.EXPECT().Supports(gomock.Eq(networks[0])).Times(0)
+	mockDelegatedNet1.EXPECT().WasMinted(gomock.Nil()).Times(0)
 	mockDelegatedNet2.EXPECT().MintNFT(gomock.Eq(root), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Times(0)
 
 	mockImageGenerator.EXPECT().Generate(gomock.Eq(root.String())).Times(1).Return(nftValidation, nil)
@@ -346,7 +355,8 @@ func TestManager_RegisterTx_MintNFTError(t *testing.T) {
 	mockDataRepository.EXPECT().Get().Times(1).Return(data, nil)
 
 	mockIPFSClient := ipfs.NewMockClient(ctrl)
-	mockIPFSClient.EXPECT().Put(gomock.Eq(context.TODO()), gomock.Eq(txsMapped)).Times(1).Return(ipfsURL, nil)
+	mockIPFSClient.EXPECT().Put(gomock.Eq(context.TODO()), gomock.Eq(ipfs.ConsensusFile), gomock.Eq(txBytes)).Times(1).Return(ipfsURL, nil)
+	mockIPFSClient.EXPECT().Put(gomock.Eq(context.TODO()), gomock.Eq(ipfs.ImgFile), gomock.Eq(nftValidation.Image)).Times(1).Return(ipfsURL, nil)
 
 	ipfsService := ipfs.NewService(mockIPFSClient)
 
@@ -377,7 +387,7 @@ func TestManager_RegisterTx_PickWinnerError(t *testing.T) {
 
 	mockRegister.EXPECT().IsClosed().Times(1).Return(true, nil)
 	mockRegister.EXPECT().GetLotteryWinners(gomock.Any()).Times(0)
-	mockRegister.EXPECT().GenerateRoot(gomock.Any(), gomock.Eq(networks[0])).Times(0)
+	mockRegister.EXPECT().GenerateRoot(gomock.Any()).Times(0)
 	mockRegister.EXPECT().PickWinner().Times(1).Return(errors.New("some error"))
 
 	mockDelegatedNet1.EXPECT().Supports(gomock.Eq(networks[0])).Times(0)
@@ -412,7 +422,7 @@ func TestManager_RegisterTx_GetLatestBlockError(t *testing.T) {
 
 	mockRegister.EXPECT().IsClosed().Times(1).Return(true, nil)
 	mockRegister.EXPECT().GetLotteryWinners(gomock.Any()).Times(1).Return(networks[0], nil)
-	mockRegister.EXPECT().GenerateRoot(gomock.Any(), gomock.Eq(networks[0])).Times(0)
+	mockRegister.EXPECT().GenerateRoot(gomock.Any()).Times(0)
 	mockRegister.EXPECT().PickWinner().Times(1).Return(nil)
 	mockSubscriber.EXPECT().GetLatestBlock().Times(1).Return(nil, errors.New("some error"))
 
@@ -449,7 +459,7 @@ func TestManager_RegisterTx_GetDataError(t *testing.T) {
 
 	mockRegister.EXPECT().IsClosed().Times(1).Return(true, nil)
 	mockRegister.EXPECT().GetLotteryWinners(gomock.Any()).Times(1).Return(networks[0], nil)
-	mockRegister.EXPECT().GenerateRoot(gomock.Any(), gomock.Eq(networks[0])).Times(0)
+	mockRegister.EXPECT().GenerateRoot(gomock.Any()).Times(0)
 	mockRegister.EXPECT().PickWinner().Times(1).Return(nil)
 	mockSubscriber.EXPECT().GetLatestBlock().Times(1).Return(nil, nil)
 	mockDataRepository.EXPECT().Get().Times(1).Return(nil, errors.New("some error"))

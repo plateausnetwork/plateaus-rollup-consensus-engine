@@ -7,7 +7,6 @@ import (
 	"github.com/rhizomplatform/plateaus-rollup-consensus-engine/internal/lottery/plateaus"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"time"
 )
 
 func TestService_GetLatestBlock(t *testing.T) {
@@ -79,7 +78,7 @@ func TestService_IsAvailable(t *testing.T) {
 	clientRPCMock := plateaus.NewMockRPCClient(ctrl)
 
 	repositoryMock.EXPECT().Get().Times(1).Return(&data, nil)
-	clientRPCMock.EXPECT().IsOpen(gomock.AssignableToTypeOf(time.Time{})).Times(1).Return(true, nil)
+	clientRPCMock.EXPECT().IsOpen().Times(1).Return(true, nil)
 
 	s := SubscribeService{
 		dr:  repositoryMock,
@@ -186,6 +185,7 @@ func TestService_IsAvailable_LastBlockSubscribedIsGreaterNextMinHeight(t *testin
 }
 
 func TestService_Subscribe(t *testing.T) {
+	height := 1
 	peer := "peer"
 	networks := []string{
 		"polygon", "arbitrum",
@@ -195,15 +195,15 @@ func TestService_Subscribe(t *testing.T) {
 	repositoryMock := database.NewMockDataRepository(ctrl)
 	clientRPCMock := plateaus.NewMockRPCClient(ctrl)
 
-	clientRPCMock.EXPECT().Subscribe(gomock.Any()).Times(2).Return(nil)
-	repositoryMock.EXPECT().Store(gomock.Any()).Times(1).Return(nil)
+	clientRPCMock.EXPECT().Subscribe(gomock.Eq(networks)).Times(1).Return(nil)
+	repositoryMock.EXPECT().Store(gomock.Eq(&database.Data{LastBlockSubscribed: height})).Times(1).Return(nil)
 
 	s := SubscribeService{
 		dr:  repositoryMock,
 		rpc: clientRPCMock,
 	}
 
-	err := s.Subscribe(1, peer, networks)
+	err := s.Subscribe(height, peer, networks)
 
 	assert.NoError(t, err)
 }
@@ -218,7 +218,7 @@ func TestService_Subscribe_RPCSubscribe_Error(t *testing.T) {
 	repositoryMock := database.NewMockDataRepository(ctrl)
 	clientRPCMock := plateaus.NewMockRPCClient(ctrl)
 
-	clientRPCMock.EXPECT().Subscribe(gomock.Eq(networks[0])).Times(1).Return(errors.New("some error"))
+	clientRPCMock.EXPECT().Subscribe(gomock.Eq(networks)).Times(1).Return(errors.New("some error"))
 	repositoryMock.EXPECT().Store(gomock.Any()).Times(0)
 
 	s := SubscribeService{
