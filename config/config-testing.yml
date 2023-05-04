@@ -3,21 +3,21 @@ plateaus_node_validator_contract_address: "0x0A6c313f21e7964F4cE85dF552C0e34c0A0
 networks:
   - name: "polygon"
     min_amount: 0.1
-    private_key: "{some private key}"
+    private_key: ""
     lottery_validation_contract_address: "0x524208ed9f98037DcE78f3eeec250E886455038C"
     rpc: "https://rpc.ankr.com/polygon_mumbai"
 #  - name: "zksync"
 #    min_amount: 0.001
-#    private_key: "{some private key}"
+#    private_key: ""
 #    lottery_validation_contract_address: "{some contract address}"
-#    rpc: "{some rpc}"
+#    rpc: ""
   - name: "scroll"
     min_amount: 0.001
-    private_key: "{some private key}"
+    private_key: ""
     lottery_validation_contract_address: "0xB307E7318305aFb05b991518cc898312db1f9c68"
     rpc: "https://alpha-rpc.scroll.io/l2"
-peer: "{some peer id}"
-plateaus_private_key: "{some private key}"
+peer: ""
+plateaus_private_key: ""
 plateaus_rpc: "https://plateaus-testnet.rhizom.me"
 plateaus_rest: "http://sentry-nodes.rhizom.me:1317"
-ipfs_token: "{some token}"
+ipfs_token: ""
